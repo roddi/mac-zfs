@@ -2,9 +2,8 @@
  * CDDL HEADER START
  *
  * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License").  You may not use this file except in compliance
- * with the License.
+ * Common Development and Distribution License (the "License").
+ * You may not use this file except in compliance with the License.
  *
  * You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
  * or http://www.opensolaris.org/os/licensing.
@@ -20,7 +19,7 @@
  * CDDL HEADER END
  */
 /*
- * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
+ * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
 
@@ -31,12 +30,6 @@
  * Portions of this source code were derived from Berkeley 4.3 BSD
  * under license from the Regents of the University of California.
  */
- 
-/* Portions Copyright 2007 Apple Inc. All rights reserved.
- * Use is subject to license terms.
- */
-
-#pragma ident	"@(#)xdr.c	1.36	05/06/08 SMI"
 
 /*
  * xdr.c, generic XDR routines implementation.
@@ -48,9 +41,7 @@
 #include <sys/param.h>
 #include <sys/cmn_err.h>
 #include <sys/types.h>
-#ifdef _KERNEL
 #include <sys/systm.h>
-#endif
 
 #include <rpc/types.h>
 #include <rpc/xdr.h>
@@ -131,9 +122,6 @@ xdr_int(XDR *xdrs, int *ip)
 	if (xdrs->x_op == XDR_FREE)
 		return (TRUE);
 
-#ifdef DEBUG
-	printf("xdr_int: FAILED\n");
-#endif
 	return (FALSE);
 }
 
@@ -157,9 +145,6 @@ xdr_u_int(XDR *xdrs, uint_t *up)
 	if (xdrs->x_op == XDR_FREE)
 		return (TRUE);
 
-#ifdef DEBUG
-	printf("xdr_int: FAILED\n");
-#endif
 	return (FALSE);
 }
 
@@ -303,9 +288,6 @@ xdr_u_short(XDR *xdrs, ushort_t *usp)
 
 	case XDR_DECODE:
 		if (!XDR_GETINT32(xdrs, (int32_t *)&l)) {
-#ifdef DEBUG
-			printf("xdr_u_short: decode FAILED\n");
-#endif
 			return (FALSE);
 		}
 		*usp = (ushort_t)l;
@@ -314,9 +296,6 @@ xdr_u_short(XDR *xdrs, ushort_t *usp)
 	case XDR_FREE:
 		return (TRUE);
 	}
-#ifdef DEBUG
-	printf("xdr_u_short: bad op FAILED\n");
-#endif
 	return (FALSE);
 }
 
@@ -335,6 +314,29 @@ xdr_char(XDR *xdrs, char *cp)
 	}
 	*cp = (char)i;
 	return (TRUE);
+}
+
+/*
+ * XDR an unsigned char
+ */
+bool_t
+xdr_u_char(XDR *xdrs, uchar_t *cp)
+{
+	int i;
+
+	switch (xdrs->x_op) {
+	case XDR_ENCODE:
+		i = (*cp);
+		return (XDR_PUTINT32(xdrs, &i));
+	case XDR_DECODE:
+		if (!XDR_GETINT32(xdrs, &i))
+			return (FALSE);
+		*cp = (uchar_t)i;
+		return (TRUE);
+	case XDR_FREE:
+		return (TRUE);
+	}
+	return (FALSE);
 }
 
 /*
@@ -358,9 +360,6 @@ xdr_bool(XDR *xdrs, bool_t *bp)
 
 	case XDR_DECODE:
 		if (!XDR_GETINT32(xdrs, &i32b)) {
-#ifdef DEBUG
-			printf("xdr_bool: decode FAILED\n");
-#endif
 			return (FALSE);
 		}
 		*bp = (i32b == XDR_FALSE) ? FALSE : TRUE;
@@ -369,9 +368,6 @@ xdr_bool(XDR *xdrs, bool_t *bp)
 	case XDR_FREE:
 		return (TRUE);
 	}
-#ifdef DEBUG
-	printf("xdr_bool: bad op FAILED\n");
-#endif
 	return (FALSE);
 }
 
@@ -438,9 +434,6 @@ xdr_opaque(XDR *xdrs, caddr_t cp, const uint_t cnt)
 
 	if (xdrs->x_op == XDR_DECODE) {
 		if (!XDR_GETBYTES(xdrs, cp, cnt)) {
-#ifdef DEBUG
-			printf("xdr_opaque: decode FAILED\n");
-#endif
 			return (FALSE);
 		}
 		if (rndup == 0)
@@ -450,9 +443,6 @@ xdr_opaque(XDR *xdrs, caddr_t cp, const uint_t cnt)
 
 	if (xdrs->x_op == XDR_ENCODE) {
 		if (!XDR_PUTBYTES(xdrs, cp, cnt)) {
-#ifdef DEBUG
-			printf("xdr_opaque: encode FAILED\n");
-#endif
 			return (FALSE);
 		}
 		if (rndup == 0)
@@ -463,9 +453,6 @@ xdr_opaque(XDR *xdrs, caddr_t cp, const uint_t cnt)
 	if (xdrs->x_op == XDR_FREE)
 		return (TRUE);
 
-#ifdef DEBUG
-	printf("xdr_opaque: bad op FAILED\n");
-#endif
 	return (FALSE);
 }
 
@@ -489,17 +476,10 @@ xdr_bytes(XDR *xdrs, char **cpp, uint_t *sizep, const uint_t maxsize)
 	 * first deal with the length since xdr bytes are counted
 	 */
 	if (!xdr_u_int(xdrs, sizep)) {
-#ifdef DEBUG
-		printf("xdr_bytes: size FAILED\n");
-#endif
 		return (FALSE);
 	}
 	nodesize = *sizep;
 	if ((nodesize > maxsize) && (xdrs->x_op != XDR_FREE)) {
-#ifdef DEBUG
-		printf("xdr_bytes: bad size (%d) FAILED (%d max)\n",
-		    nodesize, maxsize);
-#endif
 		return (FALSE);
 	}
 
@@ -524,9 +504,6 @@ xdr_bytes(XDR *xdrs, char **cpp, uint_t *sizep, const uint_t maxsize)
 		}
 		return (TRUE);
 	}
-#ifdef DEBUG
-	printf("xdr_bytes: bad op FAILED\n");
-#endif
 	return (FALSE);
 }
 
@@ -560,9 +537,6 @@ xdr_union(XDR *xdrs, enum_t *dscmp, char *unp,
 	 * we deal with the discriminator;  it's an enum
 	 */
 	if (!xdr_enum(xdrs, dscmp)) {
-#ifdef DEBUG
-		printf("xdr_enum: dscmp FAILED\n");
-#endif
 		return (FALSE);
 	}
 	dscm = *dscmp;
@@ -620,15 +594,9 @@ xdr_string(XDR *xdrs, char **cpp, const uint_t maxsize)
 		break;
 	}
 	if (!xdr_u_int(xdrs, &size)) {
-#ifdef DEBUG
-		printf("xdr_string: size FAILED\n");
-#endif
 		return (FALSE);
 	}
 	if (size > maxsize) {
-#ifdef DEBUG
-		printf("xdr_string: bad size FAILED\n");
-#endif
 		return (FALSE);
 	}
 	nodesize = size + 1;
@@ -669,10 +637,33 @@ xdr_string(XDR *xdrs, char **cpp, const uint_t maxsize)
 		*cpp = NULL;
 		return (TRUE);
 	}
-#ifdef DEBUG
-	printf("xdr_string: bad op FAILED\n");
-#endif
 	return (FALSE);
+}
+
+/*
+ * xdr_vector():
+ *
+ * XDR a fixed length array. Unlike variable-length arrays, the storage
+ * of fixed length arrays is static and unfreeable.
+ * > basep: base of the array
+ * > size: size of the array
+ * > elemsize: size of each element
+ * > xdr_elem: routine to XDR each element
+ */
+bool_t
+xdr_vector(XDR *xdrs, char *basep, const uint_t nelem,
+	const uint_t elemsize, const xdrproc_t xdr_elem)
+{
+	uint_t i;
+	char *elptr;
+
+	elptr = basep;
+	for (i = 0; i < nelem; i++) {
+		if (!(*xdr_elem)(xdrs, elptr, LASTUNSIGNED))
+			return (FALSE);
+		elptr += elemsize;
+	}
+	return (TRUE);
 }
 
 /*
