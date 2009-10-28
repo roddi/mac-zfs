@@ -245,7 +245,7 @@ zfs_domount(struct mount *mp, dev_t mount_dev, char *osname, vfs_context_t ctx)
 	if (error)
 		goto out;
 
-	if (error = zfs_init_fs(zfsvfs, &zp, vfs_context_ucred(ctx)))
+	if (error = zfs_init_fs(zfsvfs, &zp, (cred_t *) vfs_context_ucred(ctx)))
 		goto out;
 
 	/* The call to zfs_init_fs leaves the vnode held, release it here. */
