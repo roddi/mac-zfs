@@ -68,7 +68,7 @@
  * Each vnode op performs some logical unit of work.  To do this, the ZPL must
  * properly lock its in-core state, create a DMU transaction, do the work,
  * record this work in the intent log (ZIL), commit the DMU transaction,
- * and wait the the intent log to commit if it's is a synchronous operation.
+ * and wait for the intent log to commit if it's is a synchronous operation.
  * Morover, the vnode ops must work in both normal and log replay context.
  * The ordering of events is important to avoid deadlocks and references
  * to freed memory.  The example below illustrates the following Big Rules:
@@ -896,6 +896,7 @@ zfs_vnop_lookup(struct vnop_lookup_args *ap)
 	 * Check accessibility of directory.
 	 */
 #ifndef __APPLE__
+		/* On Mac OS X, VFS performs the necessary access checks. */
 	if (error = zfs_zaccess(zdp, ACE_EXECUTE, cr)) {
 		ZFS_EXIT(zfsvfs);
 		return (error);
@@ -3024,6 +3025,7 @@ top:
 	} else {
 		error = dmu_write_pages(zfsvfs->z_os, zp->z_id,
 		                        off, len, upl, tx);
+		                        off, len, (page_t *) upl, tx);
 	}
 
 	if (error == 0) {
