@@ -269,9 +269,8 @@ spa_all_configs(uint64_t *generation)
 		}
 #endif
 	}
-	mutex_exit(&spa_namespace_lock);
-
 	*generation = spa_config_generation;
+	mutex_exit(&spa_namespace_lock);
 
 	return (pools);
 }
