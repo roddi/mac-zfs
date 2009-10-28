@@ -158,7 +158,7 @@ history_str_get(zfs_cmd_t *zc)
 {
 	char *buf;
 
-	if (zc->zc_history == NULL)
+	if (zc->zc_history == (size_t) NULL)
 		return (NULL);
 
 	buf = kmem_alloc(HIS_MAX_RECORD_LEN, KM_SLEEP);
@@ -1573,7 +1573,7 @@ zfs_ioc_pool_get_props(zfs_cmd_t *zc)
 
 	error = spa_get_props(spa, &nvp);
 
-	if (error == 0 && zc->zc_nvlist_dst != NULL)
+	if (error == 0 && zc->zc_nvlist_dst != (size_t) NULL)
 		error = put_nvlist(zc, nvp);
 	else
 		error = EFAULT;
@@ -1630,6 +1630,8 @@ zfs_ioc_iscsi_perm_check(zfs_cmd_t *zc)
 	    zfs_prop_to_name(ZFS_PROP_SHAREISCSI), usercred);
 	crfree(usercred);
 	return (error);
+#else
+	return (ENODEV); /* jasonrm : not supported on in mac-zfs (yet?) */
 #endif /* !__APPLE__ */
 }
 
@@ -1785,7 +1787,7 @@ zfs_ioc_create(zfs_cmd_t *zc)
 	if (strchr(zc->zc_name, '@'))
 		return (EINVAL);
 
-	if (zc->zc_nvlist_src != NULL &&
+	if (zc->zc_nvlist_src != (size_t) NULL &&
 	    (error = get_nvlist(zc, &nvprops)) != 0)
 		return (error);
 
@@ -2264,7 +2266,8 @@ zfs_ioc_share(zfs_cmd_t *zc)
 	    zc->zc_share.z_sharemax);
 
 	return (error);
-
+#else
+	return (ENODEV); /* jasonrm : not supported on in mac-zfs (yet?) */
 #endif /*!__APPLE__ */
 }
 
@@ -2391,7 +2394,7 @@ static int
 				zfs_log_history(zc);
 		} else {
 #ifdef ZFS_DEBUG
-			printf("zvec_func[%d]: error %d\n", vec, error);
+			printf("[%s] zvec_func[%d]: error %d\n", __FUNCTION__ , vec, error);
 #endif
 		}
 	}
@@ -2481,10 +2484,10 @@ zfs_info(dev_info_t *dip, ddi_info_cmd_t infocmd, void *arg, void **result)
 #ifdef __APPLE__
 static struct cdevsw zfs_cdevsw =
 {
-	zvol_open,		/* open */
-	zvol_close,		/* close */
-	zvol_read,		/* read */
-	zvol_write,		/* write */
+	(open_close_fcn_t *) zvol_open,			/* open */
+	(open_close_fcn_t *) zvol_close,		/* close */
+	(read_write_fcn_t *) zvol_read,			/* read */
+	(read_write_fcn_t *) zvol_write,		/* write */
 	zfsdev_ioctl,		/* ioctl */
 	(stop_fcn_t *)&nulldev,	/* stop */
 	(reset_fcn_t *)&nulldev,/* reset */
@@ -2494,7 +2497,7 @@ static struct cdevsw zfs_cdevsw =
 	eno_strat,		/* strategy */
 	eno_getc,		/* getc */
 	eno_putc,		/* putc */
-	0			/* type */
+	0				/* type */
 };
 
 static int zfs_ioctl_installed = 0;

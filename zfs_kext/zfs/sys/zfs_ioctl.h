@@ -165,6 +165,13 @@ extern int zfs_secpolicy_destroy_perms(const char *name, cred_t *cr);
 extern int zfs_busy(void);
 extern int zfs_unmount_snap(char *, void *);
 
+extern int zfs_secpolicy_write_perms(const char *name, const char *perm, cred_t *cr);
+extern int zfs_secpolicy_fsacl(zfs_cmd_t *zc, cred_t *cr);
+extern int zfs_secpolicy_rollback(zfs_cmd_t *zc, cred_t *cr);
+extern int zfs_secpolicy_send(zfs_cmd_t *zc, cred_t *cr);
+extern int zfs_secpolicy_share(zfs_cmd_t *zc, cred_t *cr);
+
+
 #endif	/* _KERNEL */
 
 #ifdef	__cplusplus
