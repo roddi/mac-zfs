@@ -392,9 +392,10 @@ dnode_evict_dbufs(dnode_t *dn, boolean_t try)
 		 */
 		mutex_exit(&dn->dn_dbufs_mtx);
 		if (evicting)
-			delay(1);
+			delay(2);
 		pass++;
-		ASSERT(pass < 100); /* sanity check */
+		if ( !(pass % 100) ) printf("[%s] DB_EVICTING PROBLEMS [%d]\n", __FUNCTION__, pass);
+		ASSERT(pass < 1000); /* sanity check */
 	} while (progress);
 
 	/*
