@@ -39,9 +39,13 @@
 
 #include <sys/fs/zfs_sysctl.h>
 
-
-#define ONEMEGABYTE	(1024*1024)
-
+#ifdef ZFS_LEOPARD_ONLY
+#define ONEKILOBYTE 1024		/* 1 KB is 2^10 bytes in Leopard */
+#define ONEMEGABYTE	(1024*1024) /* 1 MB is 2^20 bytes in Leopard */
+#else
+#define ONEKILOBYTE 1000		/* 1 KB is one thousand bytes in Snow Leopard */
+#define ONEMEGABYTE	(1000*1000) /* 1 MB is one million bytes in Snow Leopard */
+#endif
 
 int kmem_cache_total;
 int kmem_cache_inuse;
@@ -83,13 +87,13 @@ print_cache_info(kmem_cache_stats_t *cache_stats)
 		sprintf(linebuf, " zio_bufs %d", cache_stats->cache_obj_size);
 		mvaddstr(row, 0, linebuf);
 
-		sprintf(linebuf, "%9d %9d %9d %9d %9d %7d%K",
+		sprintf(linebuf, "%9d %9d %9d %9d %9d %7dK",
 			cache_stats->cache_obj_size,
 			cache_stats->cache_slab_size,
 			cache_stats->cache_obj_inuse + twin_stats->cache_obj_inuse,
 			cache_stats->cache_obj_count + twin_stats->cache_obj_count,
 			cache_stats->cache_obj_peak + twin_stats->cache_obj_peak,
-			(cache_stats->cache_obj_size * cache_stats->cache_obj_count) / 1024);
+			(cache_stats->cache_obj_size * cache_stats->cache_obj_count) / ONEKILOBYTE);
 
 		kmem_cache_total += twin_stats->cache_obj_size * twin_stats->cache_obj_count;
 		kmem_cache_inuse += twin_stats->cache_obj_size * twin_stats->cache_obj_inuse;
@@ -100,13 +104,13 @@ print_cache_info(kmem_cache_stats_t *cache_stats)
 		sprintf(linebuf, " %s", cache_stats->cache_name);
 		mvaddstr(row, 0, linebuf);
 
-		sprintf(linebuf, "%9d %9d %9d %9d %9d %7d%K",
+		sprintf(linebuf, "%9d %9d %9d %9d %9d %7dK",
 			cache_stats->cache_obj_size,
 			cache_stats->cache_slab_size,
 			cache_stats->cache_obj_inuse,
 			cache_stats->cache_obj_count,
 			cache_stats->cache_obj_peak,
-			(cache_stats->cache_obj_size * cache_stats->cache_obj_count) / 1024);
+			(cache_stats->cache_obj_size * cache_stats->cache_obj_count) / ONEKILOBYTE);
 
 	}
 
