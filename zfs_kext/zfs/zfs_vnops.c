@@ -3024,7 +3024,6 @@ top:
 		ubc_upl_unmap(upl);
 	} else {
 		error = dmu_write_pages(zfsvfs->z_os, zp->z_id,
-		                        off, len, upl, tx);
 		                        off, len, (page_t *) upl, tx);
 	}
 
