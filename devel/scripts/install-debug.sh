@@ -12,6 +12,7 @@ fi
 
 cp $localSource/zfs /usr/sbin/zfs
 cp $localSource/zpool /usr/sbin/zpool
+cp $localSource/zoink /usr/sbin/zoink
 cp $localSource/libavl.dylib /usr/lib/libavl.dylib
 cp $localSource/libdevid.dylib /usr/lib/libdevid.dylib
 cp $localSource/libgen.dylib /usr/lib/libgen.dylib
@@ -31,6 +32,7 @@ chown -R root:wheel /Library/Extensions/zfs.kext
 chown -R root:wheel /System/Library/Filesystems/zfs.fs
 chown -R root:wheel /usr/sbin/zpool
 chown -R root:wheel /usr/sbin/zfs
+chown -R root:wheel /usr/sbin/zoink
 chown -R root:wheel /usr/lib/libzfs.dylib
 
 rm -rf /System/Library/Caches/com.apple.kext.caches
