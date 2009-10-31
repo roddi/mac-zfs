@@ -156,7 +156,7 @@ uu_avl_node_init(void *base, uu_avl_node_t *np, uu_avl_pool_t *pp)
 	}
 
 	na[0] = POOL_TO_MARKER(pp);
-	na[1] = NULL;
+	na[1] = (uintptr_t) NULL;
 }
 
 void
@@ -450,7 +450,7 @@ uu_avl_remove(uu_avl_t *ap, void *elem)
 	avl_remove(&ap->ua_tree, elem);
 
 	na[0] = POOL_TO_MARKER(pp);
-	na[1] = NULL;
+	na[1] = (uintptr_t) NULL;
 }
 
 void *
@@ -463,7 +463,7 @@ uu_avl_teardown(uu_avl_t *ap, void **cookie)
 		uintptr_t *na = NODE_ARRAY(pp, elem);
 
 		na[0] = POOL_TO_MARKER(pp);
-		na[1] = NULL;
+		na[1] = (uintptr_t) NULL;
 	}
 	return (elem);
 }
