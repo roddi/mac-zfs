@@ -30,6 +30,12 @@
 
 /* Begin PBXBuildFile section */
 		2611F8040ACDE72900E5D4E2 /* zfs.util in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2611F7360ACDD13900E5D4E2 /* zfs.util */; };
+		964B2C6A109CDE8400968674 /* avl.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E652109ACD6D006593D6 /* avl.c */; };
+		964B2C6D109CDE9A00968674 /* nvpair.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E656109ACD6D006593D6 /* nvpair.c */; };
+		964B2C70109CDEAD00968674 /* qsort.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E690109ACD6D006593D6 /* qsort.c */; };
+		964B2C73109CDF0800968674 /* zfs_namecheck.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E695109ACD6E006593D6 /* zfs_namecheck.c */; };
+		964B2C74109CDF1F00968674 /* zfs_prop.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E697109ACD6E006593D6 /* zfs_prop.c */; };
+		964B2C75109CDF8B00968674 /* zfs_deleg.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E693109ACD6E006593D6 /* zfs_deleg.c */; };
 		9661E7D5109ADCEC006593D6 /* zpool_iter.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E729109ACD6E006593D6 /* zpool_iter.c */; };
 		9661E7D6109ADCEC006593D6 /* zpool_main.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E72A109ACD6E006593D6 /* zpool_main.c */; };
 		9661E7D7109ADCEC006593D6 /* zpool_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E72B109ACD6E006593D6 /* zpool_util.c */; };
@@ -1799,6 +1805,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				964B2C75109CDF8B00968674 /* zfs_deleg.c in Sources */,
+				964B2C74109CDF1F00968674 /* zfs_prop.c in Sources */,
+				964B2C73109CDF0800968674 /* zfs_namecheck.c in Sources */,
+				964B2C70109CDEAD00968674 /* qsort.c in Sources */,
+				964B2C6D109CDE9A00968674 /* nvpair.c in Sources */,
+				964B2C6A109CDE8400968674 /* avl.c in Sources */,
 				9661E8BC109AE2FD006593D6 /* callb.c in Sources */,
 				9661E8BD109AE2FD006593D6 /* kmem.c in Sources */,
 				9661E8BE109AE2FD006593D6 /* list.c in Sources */,
@@ -2097,6 +2109,7 @@
 				MODULE_START = zfs_module_start;
 				MODULE_STOP = zfs_module_stop;
 				MODULE_VERSION = 8.0;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-iquote",
 					"$(SRCROOT)/src/zfs-common/zfs",
@@ -2238,6 +2251,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Filesystems/zfs.fs";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
 					"$(SRCROOT)/src/zfs-common/",
@@ -2281,6 +2295,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "src/zfs-fs/Info.plist";
 				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Filesystems";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = zfs;
@@ -2321,6 +2336,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "TEXT_DOMAIN=0";
 				INSTALL_PATH = /usr/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
 					"$(SRCROOT)/src/zfs-common",
@@ -2377,6 +2393,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/sbin;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
 					"$(SRCROOT)/src/libzfs/",
@@ -2453,6 +2470,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
 					"$(SRCROOT)/src/zfs-common/",
@@ -2495,6 +2513,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/sbin;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
 					"$(SRCROOT)/src/libzfs/",
@@ -2540,6 +2559,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-I",
 					"$(SRCROOT)/src/zfs-common",
@@ -2576,6 +2596,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
 					"$(SRCROOT)/src/zfs-common",
@@ -2612,6 +2633,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-I",
 					"$(SRCROOT)/src/zfs-common",
@@ -2652,6 +2674,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = libgen;
 			};
@@ -2684,6 +2707,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-I",
 					"$(SRCROOT)/src/zfs-common",
@@ -2726,6 +2750,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = libmaczfs;
 			};
@@ -2757,6 +2782,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = "fix-nofs";
 			};

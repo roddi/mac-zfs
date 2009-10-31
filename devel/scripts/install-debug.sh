@@ -12,9 +12,17 @@ fi
 
 cp $localSource/zfs /usr/sbin/zfs
 cp $localSource/zpool /usr/sbin/zpool
+cp $localSource/libavl.dylib /usr/lib/libavl.dylib
+cp $localSource/libdevid.dylib /usr/lib/libdevid.dylib
+cp $localSource/libgen.dylib /usr/lib/libgen.dylib
+cp $localSource/libmaczfs.dylib /usr/lib/libmaczfs.dylib
+cp $localSource/libnvpair.dylib /usr/lib/libnvpair.dylib
+cp $localSource/libuutil.dylib /usr/lib/libuutil.dylib
+cp $localSource/libnvpair.dylib /usr/lib/libnvpair.dylib
 cp $localSource/libzfs.dylib /usr/lib/libzfs.dylib
 
-rm -rf /System/Library/Filesystems/zfs.fs /Library/Extensions/zfs.kext
+rm -rf /System/Library/Filesystems/zfs.fs
+rm -rf /Library/Extensions/zfs.kext
 
 cp -R $localSource/zfs.fs /System/Library/Filesystems/zfs.fs
 cp -R $localSource/zfs.kext /Library/Extensions/zfs.kext
