@@ -379,6 +379,7 @@
 		26E59EBF0B87AA2700CFC573 /* zoink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = zoink; sourceTree = BUILT_PRODUCTS_DIR; };
 		26F63DB20AABD480000C5196 /* zfs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = zfs; sourceTree = BUILT_PRODUCTS_DIR; };
 		32A4FEC40562C75800D090E7 /* zfs.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zfs.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		964B2C98109CE28F00968674 /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
 		9661E60A109ACD13006593D6 /* gdbmacros */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gdbmacros; sourceTree = "<group>"; };
 		9661E60C109ACD13006593D6 /* fix-nofs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "fix-nofs.m"; sourceTree = "<group>"; };
 		9661E60E109ACD13006593D6 /* install-debug.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "install-debug.sh"; sourceTree = "<group>"; };
@@ -386,7 +387,6 @@
 		9661E613109ACD40006593D6 /* zfs.8 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = zfs.8; sourceTree = "<group>"; };
 		9661E614109ACD40006593D6 /* zfs.util.8 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = zfs.util.8; sourceTree = "<group>"; };
 		9661E615109ACD40006593D6 /* zpool.8 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = zpool.8; sourceTree = "<group>"; };
-		9661E617109ACD40006593D6 /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
 		9661E619109ACD54006593D6 /* APPLE_LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = APPLE_LICENSE; sourceTree = "<group>"; };
 		9661E61D109ACD6D006593D6 /* devid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = devid.h; sourceTree = "<group>"; };
 		9661E61F109ACD6D006593D6 /* deviceid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deviceid.c; sourceTree = "<group>"; };
@@ -761,6 +761,7 @@
 		089C166AFE841209C02AAC07 /* zfs */ = {
 			isa = PBXGroup;
 			children = (
+				964B2C98109CE28F00968674 /* README.markdown */,
 				96A9F906109C273B0050AF13 /* upstream */,
 				9661E61B109ACD6D006593D6 /* src */,
 				9661E618109ACD54006593D6 /* licenses */,
@@ -858,7 +859,6 @@
 		9661E616109ACD40006593D6 /* markdown */ = {
 			isa = PBXGroup;
 			children = (
-				9661E617109ACD40006593D6 /* README.markdown */,
 			);
 			path = markdown;
 			sourceTree = "<group>";

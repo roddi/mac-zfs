@@ -1,33 +1,33 @@
-# ZFS
+# mac-zfs
 
-If you store data, you probably want ZFS.
+The goal of this branch is to clean up the project so that it
+is more easy to understand and relatable to the OpenSolaris
+source by seperating the libraries into the same modules as
+they exist in OpenSolaris and keeping them as pure as possible.
 
-This project exists to keep ZFS available and functional on MacOS X.
+When additional functionality is required by the upstream source
+I hope to find a way to implement it within libmaczfs.
 
-The initial [blog post][blogpost] about the birth of this project on
-github tells a story.
+The current ZFS code remains at the b72 level.
 
-# Use It
+I don't recommend using this branch as it's likely to be broken
+at various times while I mess with it.
 
-[Downloads][downloads] are available at this project's
-[download][mydl] page, or via the [google group][group].
+# Layout
 
-The [getting
-started guide][starting] at the [google code][gcode] wiki will help
-you start making use of the package.
+## /devel
+ The development scripts, installer package builder.
 
-# Give Feedback.
+## /docs
+ man pages and future documentation.
 
-There's a [google group][group] and a [google code][gcode] site for
-talking about and reading about the project.
-
-The [bug tracker][bugs] is waiting for you to tell us how to improve
-the project.
-
-[blogpost]: http://dustin.github.com/2009/10/23/mac-zfs.html
-[downloads]: http://groups.google.com/group/zfs-macos/files
-[mydl]: http://github.com/dustin/mac-zfs/downloads
-[group]: http://groups.google.com/group/zfs-macos/
-[gcode]: http://code.google.com/p/maczfs/
-[bugs]: http://code.google.com/p/maczfs/issues/list/
-[starting]: http://code.google.com/p/maczfs/wiki/GettingStarted
+## /licenses
+ Full text of the APSL and CDDL.
+ 
+## /src
+ Currently all of the code is here, however I'd like to have only
+ code that is mac-zfs specific in here.
+ 
+## /upstream
+ This is where the future OpenSolaris code will live.
+ Check /devel/scripts/update-upstream.sh to see where it's headed.
