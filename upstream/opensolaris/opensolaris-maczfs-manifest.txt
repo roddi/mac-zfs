@@ -1,0 +1,17 @@
+usr/src/uts/common/fs/zfs/*
+usr/src/common/avl/*
+usr/src/common/zfs/*
+usr/src/common/devid/*
+usr/src/common/nvpair/*
+usr/src/uts/common/sys/*
+usr/src/uts/common/sys/fs/zfs.h
+usr/src/uts/common/sys/fm/fs/zfs.h
+usr/src/lib/libavl/*
+usr/src/lib/libdevid/*
+usr/src/lib/libgen/*
+usr/src/lib/libnvpair/*
+usr/src/lib/libuutil/*
+usr/src/lib/libzfs/*
+usr/src/lib/libzpool/*
+usr/src/cmd/zfs/*
+usr/src/cmd/zpool/*
