@@ -475,7 +475,6 @@ out:
 	return (error);
 }
 
-#ifndef ZFS_READONLY_KEXT
 
 static int
 zfs_vnop_write(struct vnop_write_args *ap)
@@ -708,7 +707,6 @@ zfs_vnop_write(struct vnop_write_args *ap)
 	ZFS_EXIT(zfsvfs);
 	return (0);
 }
-#endif /* !ZFS_READONLY_KEXT */
 
 static void
 zfs_get_done(dmu_buf_t *db, void *vzgd)
@@ -939,7 +937,6 @@ out:
 	return (error);
 }
 
-#ifndef ZFS_READONLY_KEXT
 /*
  * Create a new file.
  */
@@ -1469,7 +1466,6 @@ out:
 	ZFS_EXIT(zfsvfs);
 	return (error);
 }
-#endif /* !ZFS_READONLY_KEXT */
 
 /*
  * Read as many directory entries as will fit into the provided
@@ -1768,7 +1764,6 @@ ulong_t zfs_fsync_sync_cnt = 4;
 static int
 zfs_vnop_fsync(struct vnop_fsync_args *ap)
 {
-#ifndef ZFS_READONLY_KEXT
 	struct vnode  *vp = ap->a_vp;
 	znode_t  *zp = VTOZ(vp);
 	zfsvfs_t  *zfsvfs;
@@ -1800,7 +1795,6 @@ zfs_vnop_fsync(struct vnop_fsync_args *ap)
 	zil_commit(zfsvfs->z_log, zp->z_last_itx, zp->z_id);
 	ZFS_EXIT(zfsvfs);
 
-#endif /* !ZFS_READONLY_KEXT */
 
 	return (0);
 }
@@ -1828,9 +1822,6 @@ zfs_vnop_getattr(struct vnop_getattr_args *ap)
 	mutex_enter(&zp->z_lock);
 
 	vap->va_mode = pzp->zp_mode & MODEMASK;
-#ifdef ZFS_READONLY_KEXT
-	vap->va_mode &= ~(S_IWUSR | S_IWGRP | S_IWOTH);
-#endif
 	vap->va_uid = pzp->zp_uid;
 	vap->va_gid = pzp->zp_gid;
 //	vap->va_fsid = zp->z_zfsvfs->z_vfs->vfs_dev;
@@ -1954,7 +1945,6 @@ zfs_vnop_getattr(struct vnop_getattr_args *ap)
 	return (0);
 }
 
-#ifndef ZFS_READONLY_KEXT
 /*
  * Set file attributes.
  */
@@ -2671,7 +2661,6 @@ top:
 	ZFS_EXIT(zfsvfs);
 	return (error);
 }
-#endif /* !ZFS_READONLY_KEXT */
 
 static int
 zfs_vnop_readlink(struct vnop_readlink_args *ap)
@@ -2706,7 +2695,6 @@ zfs_vnop_readlink(struct vnop_readlink_args *ap)
 	return (error);
 }
 
-#ifndef ZFS_READONLY_KEXT
 
 static int
 zfs_vnop_link(struct vnop_link_args *ap)
@@ -2814,7 +2802,6 @@ top:
 	ZFS_EXIT(zfsvfs);
 	return (error);
 }
-#endif /* !ZFS_READONLY_KEXT */
 
 static int
 zfs_vnop_pagein(struct vnop_pagein_args *ap)
@@ -2918,7 +2905,6 @@ zfs_vnop_pagein(struct vnop_pagein_args *ap)
 	return (error);
 }
 
-#ifndef ZFS_READONLY_KEXT
 
 static int
 zfs_vnop_pageout(struct vnop_pageout_args *ap)
@@ -3054,7 +3040,6 @@ exit:
 	ZFS_EXIT(zfsvfs);
 	return (error);
 }
-#endif /* !ZFS_READONLY_KEXT */
 
 static int
 zfs_vnop_mmap(struct vnop_mmap_args *ap)
@@ -3153,13 +3138,11 @@ zfs_vnop_reclaim(struct vnop_reclaim_args *ap)
 	return (0);
 }
 
-#ifndef ZFS_READONLY_KEXT
 static int
 zfs_vnop_mknod(struct vnop_mknod_args *ap)
 {
 	return zfs_vnop_create((struct vnop_create_args *)ap);
 }
-#endif /* !ZFS_READONLY_KEXT */
 
 static int
 zfs_vnop_allocate(struct vnop_allocate_args *ap)
@@ -3204,9 +3187,6 @@ zfs_vnop_whiteout(struct vnop_whiteout_args *ap)
 			break;
 		}
 		case CREATE: {
-#ifdef ZFS_READONLY_KEXT	
-			return (EROFS);
-#else
 			struct vnop_mknod_args mknod_args;
 			struct vnode_attr va;
 
@@ -3229,12 +3209,8 @@ zfs_vnop_whiteout(struct vnop_whiteout_args *ap)
 			 * a vnode isn't created for whiteouts.
 			 */
 			break;
-#endif /* ZFS_READONLY_KEXT */
 		}
 		case DELETE: {
-#ifdef ZFS_READONLY_KEXT	
-			return (EROFS);
-#else
 			struct vnop_remove_args remove_args;
 			struct vnop_lookup_args lookup_args;
 
@@ -3257,7 +3233,6 @@ zfs_vnop_whiteout(struct vnop_whiteout_args *ap)
 			error = zfs_vnop_remove(&remove_args);
 			vnode_put(vp);
 			break;
-#endif /* ZFS_READONLY_KEXT */
 		}
 
 		default:
@@ -3388,7 +3363,6 @@ out:
 	return (error);
 }
 
-#ifndef ZFS_READONLY_KEXT
 /*
  * Lookup/Create an extended attribute entry.
  *
@@ -3610,7 +3584,6 @@ out:
 
 	return (error);
 }
-#endif /* !ZFS_READONLY_KEXT */
 
 /*
  * Generate a list of extended attribute names.
@@ -3752,7 +3725,6 @@ out:
 	return (error);
 }
 
-#ifndef ZFS_READONLY_KEXT
 /*
  * Create a stream.
  */
@@ -3881,7 +3853,6 @@ zfs_vnop_exchange(__unused struct vnop_exchange_args *ap)
 	return (EPERM);
 }
 
-#endif /* !ZFS_READONLY_KEXT */
 
 static int
 zfs_vnop_revoke(__unused struct vnop_revoke_args *ap)
@@ -3932,24 +3903,6 @@ zfs_isdir(__unused void *ap)
 }
 
 
-#ifdef ZFS_READONLY_KEXT
-static int zfs_vnop_create(void *ap) { return (EROFS); }
-static int zfs_vnop_mknod(void *ap) { return (EROFS); }
-static int zfs_vnop_setattr(void *ap) { return (EROFS); }
-static int zfs_vnop_write(void *ap) { return (EROFS); }
-static int zfs_vnop_remove(void *ap) { return (EROFS); }
-static int zfs_vnop_link(void *ap) { return (EROFS); }
-static int zfs_vnop_rename(void *ap) { return (EROFS); }
-static int zfs_vnop_mkdir(void *ap) { return (EROFS); }
-static int zfs_vnop_rmdir(void *ap) { return (EROFS); }
-static int zfs_vnop_symlink(void *ap) { return (EROFS); }
-static int zfs_vnop_pageout(void *ap) { return (EROFS); }
-static int zfs_vnop_setxattr(void *ap) { return (EROFS); }
-static int zfs_vnop_removexattr(void *ap) { return (EROFS); }
-static int zfs_vnop_makenamedstream(void *ap) { return (EROFS); }
-static int zfs_vnop_removenamedstream(void *ap) { return (EROFS); }
-static int zfs_vnop_exchange(void *ap) { return (EROFS); }
-#endif
 
 #define VOPFUNC int (*)(void *)
 

@@ -177,42 +177,6 @@ static zfs_command_t command_table[] = {
 
 #define	NCOMMAND	(sizeof (command_table) / sizeof (command_table[0]))
 
-#ifdef __APPLE__
-/*
- * The read-only zfs kext has limited zfs command functionality
- */
-static int zfs_read_only_command[] = {
-	0,	/* create */
-	0,	/* destroy */
-	0,	/* NULL */
-	0,	/* snapshot */
-	0,	/* rollback */
-	0,	/* clone */
-	0,	/* promote */
-	0,	/* rename */
-	0,	/* NULL */
-	1,	/* list */
-	1,	/* NULL */
-	0,	/* set */
-	1,	/* get */
-	0,	/* inherit */
-	1,	/* NULL */
-	1,	/* mount */
-	1,	/* NULL */
-	1,	/* unmount */
-	1,	/* NULL */
-	0,	/* share */
-	0,	/* NULL */
-	0,	/* unshare */
-	0,	/* NULL */
-	1,	/* send */
-	0	/* receive */
-};
-
-extern int zfs_readonly_kext;
-
-#endif /* __APPLE__ */
-
 zfs_command_t *current_command;
 
 static const char *
@@ -367,10 +331,6 @@ usage(boolean_t requested)
 		    gettext("where 'command' is one of the following:\n\n"));
 
 		for (i = 0; i < NCOMMAND; i++) {
-#ifdef __APPLE__
-			if (zfs_readonly_kext && !zfs_read_only_command[i])
-				continue;
-#endif
 			if (command_table[i].name == NULL)
 				(void) fprintf(fp, "\n");
 			else
@@ -3982,10 +3942,6 @@ main(int argc, char **argv)
 		 * Make sure the user has specified some command.
 		 */
 		if (argc < 2) {
-#ifdef __APPLE__
-			if (zfs_readonly_kext)
-				(void) fprintf(stderr, "Read-Only ZFS Implementation\n");
-#endif
 			(void) fprintf(stderr, gettext("missing command\n"));
 			usage(B_FALSE);
 		}

@@ -628,26 +628,6 @@ load_zfs_kext(const char *kextpath)
 	}
 }
 
-int zfs_readonly_kext;
-
-static int
-is_readonly_kext(int typenum)
-{
-	size_t buflen;
-	int name[3];
-	int rdonly = 0;
-
-	name[0] = CTL_VFS;
-	name[1] = typenum;
-	name[2] = ZFS_SYSCTL_READONLY;
-	buflen = sizeof (rdonly);
-
-	if (sysctl(name, 3, &rdonly, &buflen, (void *)0, (size_t)0) == 0 && rdonly)
-		return (1);
-
-	return (0);
-}
-
 #endif
 
 
@@ -677,19 +657,9 @@ libzfs_init(void)
 		}
 
 		loaded = load_zfs_kext(kextpaths[pick]);
-		zfs_readonly_kext = (pick == 2);
 
-		/* Make sure user knows they have loaded the readonly kext */
-		if(zfs_readonly_kext && (loaded != -1))
-		    (void) fprintf(stderr, gettext("ZFS Readonly implemntation "
-				"is loaded!\nTo download the full ZFS "
-				"read/write kext with all functionality "
-				"enabled, please go to "
-				"http://developer.apple.com\n"));
-
-	} else {
-		zfs_readonly_kext = is_readonly_kext(vfc.vfc_typenum);
-	}
+	} 
+	
 	/* Attempt to create "/etc/zfs" its not already there. */
 	if (getuid() == 0 && stat("/etc/zfs", &sb)!= 0 &&  errno == ENOENT)
 	{
@@ -718,7 +688,6 @@ libzfs_init(void)
 
 	zfs_prop_init();
 
-	/* Make sure the user knows they have loaded the Read Only kext */
 	return (hdl);
 }
 

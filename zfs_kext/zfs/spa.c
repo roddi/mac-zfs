@@ -769,11 +769,7 @@ spa_load(spa_t *spa, nvlist_t *config, spa_load_state_t state, int mosconfig)
 		goto out;
 	}
 
-#ifdef ZFS_READONLY_KEXT
-	if (state != SPA_LOAD_TRYIMPORT) {
-#else
 	if ((spa_mode & FWRITE) && state != SPA_LOAD_TRYIMPORT) {
-#endif
 		dmu_tx_t *tx;
 		int need_update = B_FALSE;
 		int c;

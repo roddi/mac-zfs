@@ -344,7 +344,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = DAD6B3CE109409E4008A0395 /* fix-nofs */;
+			remoteGlobalIDString = DAD6B3CE109409E4008A0395;
 			remoteInfo = "fix-nofs";
 		};
 /* End PBXContainerItemProxy section */
