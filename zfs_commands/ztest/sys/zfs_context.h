@@ -86,6 +86,19 @@ extern "C" {
 #endif
 #include <sys/sdt.h>
 
+#ifdef __APPLE__	
+#include <stdint.h>
+#warning check all typedefs here!
+	typedef unsigned int uint_t;
+	typedef unsigned int u_offset_t;
+	typedef unsigned int offset_t;
+	typedef uint64_t rlim64_t;
+	typedef user_ulong_t ulong_t ;
+	typedef pthread_mutex_t mutex_t;
+	typedef int kmutex_t;
+	typedef pthread_rwlock_t rwlock_t;
+#endif
+	
 /*
  * Debugging
  */
@@ -132,8 +145,10 @@ extern void vpanic(const char *, ...);
 #define	VERIFY	verify
 #define	ASSERT	assert
 
+#ifndef __APPLE__
 extern void __assert(const char *, const char *, int);
-
+#endif
+	
 #ifdef lint
 #define	VERIFY3_IMPL(x, y, z, t)	if (x == z) ((void)0)
 #else
@@ -255,8 +270,12 @@ extern void rw_exit(krwlock_t *rwlp);
 /*
  * Condition variables
  */
+#ifndef __APPLE__
 typedef cond_t kcondvar_t;
-
+#else
+typedef int kcondvar_t;
+#endif
+	
 #define	CV_DEFAULT	USYNC_THREAD
 
 extern void cv_init(kcondvar_t *cv, char *name, int type, void *arg);
@@ -283,8 +302,12 @@ extern void cv_broadcast(kcondvar_t *cv);
 #define	kmem_debugging()	0
 #define	kmem_cache_reap_now(c)
 
+#ifndef __APPLE__	
 typedef umem_cache_t kmem_cache_t;
-
+#else
+typedef int kmem_cache_t;	
+#endif
+	
 /*
  * Task queues
  */
@@ -314,7 +337,7 @@ typedef struct vnode {
 	int		v_fd;
 	char		*v_path;
 } vnode_t;
-
+	
 typedef struct vattr {
 	uint_t		va_mask;	/* bit-mask of attributes */
 	u_offset_t	va_size;	/* file size in bytes */
