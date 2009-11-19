@@ -45,6 +45,11 @@
 #ifdef __APPLE__
 #include <stdint.h>
 #include <Kernel/sys/kernel_types.h>
+#include <Kernel/mach/mach_types.h>
+
+#define THR_DETACHED 0
+#define USYNC_THREAD 0
+
 #endif
 
 /*
