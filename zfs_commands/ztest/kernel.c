@@ -26,15 +26,26 @@
 #pragma ident	"@(#)kernel.c	1.3	06/03/16 SMI"
 
 #include <assert.h>
+#ifndef __APPLE__
 #include <sys/zfs_context.h>
+#else
+#include "zfs_context.h"
+#endif
 #include <poll.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#ifndef __APPLE__
 #include <sys/spa.h>
 #include <sys/processor.h>
+#endif
+
+#ifdef __APPLE__
+#include <stdint.h>
+#include <Kernel/sys/kernel_types.h>
+#endif
 
 /*
  * Emulation of kernel services in userland.

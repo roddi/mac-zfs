@@ -267,6 +267,14 @@
 		DAD6B41810940DCF008A0395 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD6B41710940DCF008A0395 /* Foundation.framework */; };
 		DAD6B4D010941B6F008A0395 /* post-install.sh in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAD6B4BA109419E8008A0395 /* post-install.sh */; };
 		DAD6B4D110941B8C008A0395 /* fix-nofs in CopyFiles */ = {isa = PBXBuildFile; fileRef = DAD6B3CF109409E4008A0395 /* fix-nofs */; };
+		DD17722B10B53998008A451A /* kernel.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = DD17722710B53998008A451A /* kernel.c */; };
+		DD17722C10B53998008A451A /* taskq.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = DD17722810B53998008A451A /* taskq.c */; };
+		DD17722D10B53998008A451A /* util.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = DD17722910B53998008A451A /* util.c */; };
+		DD17722E10B53998008A451A /* ztest.c in CopyFiles */ = {isa = PBXBuildFile; fileRef = DD17722A10B53998008A451A /* ztest.c */; };
+		DD17722F10B53998008A451A /* kernel.c in Sources */ = {isa = PBXBuildFile; fileRef = DD17722710B53998008A451A /* kernel.c */; };
+		DD17723010B53998008A451A /* taskq.c in Sources */ = {isa = PBXBuildFile; fileRef = DD17722810B53998008A451A /* taskq.c */; };
+		DD17723110B53998008A451A /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = DD17722910B53998008A451A /* util.c */; };
+		DD17723210B53998008A451A /* ztest.c in Sources */ = {isa = PBXBuildFile; fileRef = DD17722A10B53998008A451A /* ztest.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -344,7 +352,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = DAD6B3CE109409E4008A0395 /* fix-nofs */;
+			remoteGlobalIDString = DAD6B3CE109409E4008A0395;
 			remoteInfo = "fix-nofs";
 		};
 /* End PBXContainerItemProxy section */
@@ -428,6 +436,10 @@
 			files = (
 				DAD6B4D110941B8C008A0395 /* fix-nofs in CopyFiles */,
 				DAD6B4D010941B6F008A0395 /* post-install.sh in CopyFiles */,
+				DD17722B10B53998008A451A /* kernel.c in CopyFiles */,
+				DD17722C10B53998008A451A /* taskq.c in CopyFiles */,
+				DD17722D10B53998008A451A /* util.c in CopyFiles */,
+				DD17722E10B53998008A451A /* ztest.c in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -689,6 +701,12 @@
 		DAD6B3DB10940AE4008A0395 /* fix-nofs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "fix-nofs.m"; path = "install_support/fix-nofs.m"; sourceTree = "<group>"; };
 		DAD6B41710940DCF008A0395 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		DAD6B4BA109419E8008A0395 /* post-install.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "post-install.sh"; path = "install_support/post-install.sh"; sourceTree = "<group>"; };
+		DD17722010B53965008A451A /* ztest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ztest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD17722710B53998008A451A /* kernel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = kernel.c; path = zfs_commands/ztest/kernel.c; sourceTree = "<group>"; };
+		DD17722810B53998008A451A /* taskq.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = taskq.c; path = zfs_commands/ztest/taskq.c; sourceTree = "<group>"; };
+		DD17722910B53998008A451A /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = util.c; path = zfs_commands/ztest/util.c; sourceTree = "<group>"; };
+		DD17722A10B53998008A451A /* ztest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ztest.c; path = zfs_commands/ztest/ztest.c; sourceTree = "<group>"; };
+		DD17723410B539C2008A451A /* zfs_context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zfs_context.h; path = zfs_commands/ztest/sys/zfs_context.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -749,6 +767,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DD17721E10B53965008A451A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -780,6 +805,7 @@
 				26E59EBF0B87AA2700CFC573 /* zoink */,
 				2665B69E0BB47761004F043E /* zfs.readonly.kext */,
 				DAD6B3CF109409E4008A0395 /* fix-nofs */,
+				DD17722010B53965008A451A /* ztest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -997,6 +1023,7 @@
 		26A9784D0AA938FD00FF1F22 /* zfs_commands */ = {
 			isa = PBXGroup;
 			children = (
+				DD17722610B5397B008A451A /* ztest */,
 				26E59EC50B87AAE600CFC573 /* zoink */,
 				26F63DB60AABD48F000C5196 /* zfs */,
 				26A978500AA9391100FF1F22 /* zpool */,
@@ -1371,6 +1398,26 @@
 			name = install_support;
 			sourceTree = "<group>";
 		};
+		DD17722610B5397B008A451A /* ztest */ = {
+			isa = PBXGroup;
+			children = (
+				DD17723310B5399E008A451A /* sys */,
+				DD17722710B53998008A451A /* kernel.c */,
+				DD17722810B53998008A451A /* taskq.c */,
+				DD17722910B53998008A451A /* util.c */,
+				DD17722A10B53998008A451A /* ztest.c */,
+			);
+			name = ztest;
+			sourceTree = "<group>";
+		};
+		DD17723310B5399E008A451A /* sys */ = {
+			isa = PBXGroup;
+			children = (
+				DD17723410B539C2008A451A /* zfs_context.h */,
+			);
+			name = sys;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1565,6 +1612,22 @@
 			productReference = DAD6B3CF109409E4008A0395 /* fix-nofs */;
 			productType = "com.apple.product-type.tool";
 		};
+		DD17721F10B53965008A451A /* ztest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD17722510B53966008A451A /* Build configuration list for PBXNativeTarget "ztest" */;
+			buildPhases = (
+				DD17721D10B53965008A451A /* Sources */,
+				DD17721E10B53965008A451A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ztest;
+			productName = ztest;
+			productReference = DD17722010B53965008A451A /* ztest */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1587,6 +1650,7 @@
 				26E59EBE0B87AA2700CFC573 /* zoink */,
 				2665B64C0BB47761004F043E /* zfs_readonly.kext */,
 				DAD6B3CE109409E4008A0395 /* fix-nofs */,
+				DD17721F10B53965008A451A /* ztest */,
 			);
 		};
 /* End PBXProject section */
@@ -1875,6 +1939,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAD6B3DC10940AE4008A0395 /* fix-nofs.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD17721D10B53965008A451A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD17722F10B53998008A451A /* kernel.c in Sources */,
+				DD17723010B53998008A451A /* taskq.c in Sources */,
+				DD17723110B53998008A451A /* util.c in Sources */,
+				DD17723210B53998008A451A /* ztest.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2888,6 +2963,49 @@
 			};
 			name = Leopard_Release;
 		};
+		DD17722210B53966008A451A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = ztest;
+			};
+			name = Debug;
+		};
+		DD17722310B53966008A451A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = ztest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		DD17722410B53966008A451A /* Leopard_Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = ztest;
+			};
+			name = Leopard_Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2997,6 +3115,16 @@
 				DAD6B3D1109409E4008A0395 /* Debug */,
 				DAD6B3D2109409E4008A0395 /* Release */,
 				DAD6B3D3109409E4008A0395 /* Leopard_Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD17722510B53966008A451A /* Build configuration list for PBXNativeTarget "ztest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD17722210B53966008A451A /* Debug */,
+				DD17722310B53966008A451A /* Release */,
+				DD17722410B53966008A451A /* Leopard_Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

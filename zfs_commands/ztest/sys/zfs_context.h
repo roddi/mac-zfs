@@ -52,24 +52,38 @@ extern "C" {
 #include <errno.h>
 #include <string.h>
 #include <strings.h>
+#ifndef __APPLE__
 #include <synch.h>
 #include <thread.h>
+#endif
 #include <assert.h>
 #include <alloca.h>
+#ifndef __APPLE__
 #include <umem.h>
+#endif
 #include <limits.h>
+#ifndef __APPLE__
 #include <atomic.h>
+#endif
 #include <dirent.h>
 #include <time.h>
+#ifndef __APPLE__
 #include <sys/note.h>
+#endif
 #include <sys/types.h>
+#ifndef __APPLE__
 #include <sys/sysmacros.h>
 #include <sys/bitmap.h>
+#endif
 #include <sys/resource.h>
+#ifndef __APPLE__
 #include <sys/byteorder.h>
 #include <sys/list.h>
+#endif
 #include <sys/uio.h>
+#ifndef __APPLE__
 #include <sys/zfs_debug.h>
+#endif
 #include <sys/sdt.h>
 
 /*
@@ -96,8 +110,12 @@ extern void dprintf_setup(int *argc, char **argv);
 
 extern void cmn_err(int, const char *, ...);
 extern void panic(const char *, ...);
+#ifndef __APPLE__
 extern void vpanic(const char *, __va_list);
-
+#else
+extern void vpanic(const char *, ...);
+#endif
+	
 /* This definition is copied from assert.h. */
 #if defined(__STDC__)
 #if __STDC_VERSION__ - 0 >= 199901L
