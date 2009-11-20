@@ -131,7 +131,7 @@ __dprintf(const char *file, const char *func, int line, const char *fmt, ...)
 		debug_msg("%s", buf);
 #endif
 
-#if 0
+#ifndef __APPLE__
 	/*
 	 * To get this data, use the zfs-dprintf probe as so:
 	 * dtrace -q -n 'zfs-dprintf \
@@ -158,18 +158,21 @@ history_str_get(zfs_cmd_t *zc)
 {
 	char *buf;
 
-	if (zc->zc_history == (size_t) NULL)
+	if (zc->zc_history == NULL)
 		return (NULL);
 
 	buf = kmem_alloc(HIS_MAX_RECORD_LEN, KM_SLEEP);
 #ifdef __APPLE__
-	if (xcopyin(zc->zc_history, buf, HIS_MAX_RECORD_LEN) != 0) {
+	if (xcopyin((void *)(uintptr_t)zc->zc_history,
+	    buf, HIS_MAX_RECORD_LEN) != 0) {
 #else
-	if (copyinstr(zc->zc_history, buf, HIS_MAX_RECORD_LEN, NULL) != 0) {
+	if (copyinstr((void *)(uintptr_t)zc->zc_history,
+	    buf, HIS_MAX_RECORD_LEN, NULL) != 0) {
 #endif
 		history_str_free(buf);
 		return (NULL);
 	}
+
 	buf[HIS_MAX_RECORD_LEN -1] = '\0';
 	
 	return (buf);
@@ -213,7 +216,7 @@ zfs_secpolicy_read(zfs_cmd_t *zc, cred_t *cr)
 {
 #ifndef __APPLE__
 	if (INGLOBALZONE(curproc) ||
-	    zone_dataset_visible(dataset, NULL))
+	    zone_dataset_visible(zc->zc_name, NULL))
 		return (0);
 
 	return (ENOENT);
@@ -580,7 +583,11 @@ zfs_secpolicy_umount(zfs_cmd_t *zc, cred_t *cr)
 	int error;
 
 	/* XXX:  This is undefined when I link */
-	error = 0; /* secpolicy_fs_unmount(cr, NULL); */
+#ifndef __APPLE__
+	error = secpolicy_fs_unmount(cr, NULL);
+#else
+	error = 0;
+#endif
 	if (error) {
 		error = dsl_deleg_access(zc->zc_name, ZFS_DELEG_PERM_MOUNT, cr);
 	}
@@ -669,7 +676,8 @@ get_nvlist(zfs_cmd_t *zc, nvlist_t **nvp)
 
 	packed = kmem_alloc(size, KM_SLEEP);
 
-	if ((error = xcopyin(zc->zc_nvlist_src, packed, size)) != 0) {
+	if ((error = xcopyin((void *)(uintptr_t)zc->zc_nvlist_src, packed,
+	    size)) != 0) {
 		kmem_free(packed, size);
 		return (error);
 	}
@@ -700,7 +708,8 @@ put_nvlist(zfs_cmd_t *zc, nvlist_t *nvl)
 		packed = kmem_alloc(size, KM_SLEEP);
 		VERIFY(nvlist_pack(nvl, &packed, &size, NV_ENCODE_NATIVE,
 		    KM_SLEEP) == 0);
-		error = xcopyout(packed, zc->zc_nvlist_dst, size);
+		error = xcopyout(packed, (void *)(uintptr_t)zc->zc_nvlist_dst,
+		    size);
 		kmem_free(packed, size);
 	}
 
@@ -715,19 +724,17 @@ zfs_ioc_pool_create(zfs_cmd_t *zc)
 	nvlist_t *config;
 	char *buf;
 
-	if ((buf = history_str_get(zc)) == NULL)
-		return (EINVAL);
-
-	if ((error = get_nvlist(zc, &config)) != 0) {
-		history_str_free(buf);
+	if ((error = get_nvlist(zc, &config)) != 0)
 		return (error);
-	}
+
+	buf = history_str_get(zc);
 
 	error = spa_create(zc->zc_name, config, zc->zc_value[0] == '\0' ?
 	    NULL : zc->zc_value, buf);
 
+	if (buf != NULL)
+		history_str_free(buf);
 	nvlist_free(config);
-	history_str_free(buf);
 
 	return (error);
 }
@@ -838,11 +845,6 @@ zfs_ioc_pool_tryimport(zfs_cmd_t *zc)
 	error = put_nvlist(zc, config);
 	nvlist_free(config);
 	
-	/* 
-	 * We must return the error in the zc structure instead of letting
-	 * the ioctl return error, otherwise the ioctl will *NOT* xcopyout
-	 * the new data into userland
-	 */
 	return (error);
 }
 
@@ -915,7 +917,9 @@ zfs_ioc_pool_get_history(zfs_cmd_t *zc)
 	hist_buf = kmem_alloc(size, KM_SLEEP);
 	if ((error = spa_history_get(spa, &zc->zc_history_offset,
 	    &zc->zc_history_len, hist_buf)) == 0) {
-		error = xcopyout(hist_buf, zc->zc_history, zc->zc_history_len);
+		error = xcopyout(hist_buf,
+		    (char *)(uintptr_t)zc->zc_history,
+		    zc->zc_history_len);
 	}
 
 	spa_close(spa, FTAG);
@@ -954,7 +958,7 @@ zfs_ioc_obj_to_path(zfs_cmd_t *zc)
 static int
 zfs_ioc_vdev_add(zfs_cmd_t *zc)
 {
-	return (EPERM);
+#ifndef __APPLE__
 	spa_t *spa;
 	int error;
 	nvlist_t *config;
@@ -978,6 +982,9 @@ zfs_ioc_vdev_add(zfs_cmd_t *zc)
 	}
 	spa_close(spa, FTAG);
 	return (error);
+#else
+	return (EPERM);
+#endif
 }
 
 static int
@@ -1547,7 +1554,7 @@ zfs_ioc_pool_get_props(zfs_cmd_t *zc)
 
 	error = spa_get_props(spa, &nvp);
 
-	if (error == 0 && zc->zc_nvlist_dst != (size_t) NULL)
+	if (error == 0 && zc->zc_nvlist_dst != NULL)
 		error = put_nvlist(zc, nvp);
 	else
 		error = EFAULT;
@@ -1747,7 +1754,7 @@ zfs_ioc_create(zfs_cmd_t *zc)
 	if (strchr(zc->zc_name, '@'))
 		return (EINVAL);
 
-	if (zc->zc_nvlist_src != (size_t) NULL &&
+	if (zc->zc_nvlist_src != NULL &&
 	    (error = get_nvlist(zc, &nvprops)) != 0)
 		return (error);
 
@@ -1824,8 +1831,7 @@ zfs_ioc_create(zfs_cmd_t *zc)
 	 * It would be nice to do this atomically.
 	 */
 	if (error == 0) {
-		if ((error = zfs_set_prop_nvlist(zc->zc_name, zc->zc_dev, 
-						nvprops)) != 0)
+		if ((error = zfs_set_prop_nvlist(zc->zc_name, zc->zc_dev, nvprops)) != 0)
 			(void) dmu_objset_destroy(zc->zc_name);
 	}
 
@@ -1867,7 +1873,7 @@ zfs_unmount_snap(char *name, void *arg)
 	} else if (strchr(name, '@')) {
 		/* vfsp = zfs_get_vfs(name);*/
 	}
-#if 0
+#ifndef __APPLE__
 	if (vfsp) {
 		/*
 		 * Always force the unmount for snapshots.
@@ -1923,6 +1929,7 @@ static int
 zfs_ioc_rename(zfs_cmd_t *zc)
 {
 	boolean_t recursive = zc->zc_cookie & 1;
+
 	zc->zc_value[sizeof (zc->zc_value) - 1] = '\0';
 	if (dataset_namecheck(zc->zc_value, NULL, NULL) != 0)
 		return (EINVAL);
@@ -1959,7 +1966,7 @@ zfs_ioc_recvbackup(zfs_cmd_t *zc)
 
 	fd = zc->zc_cookie;
 
-
+	
 	/*XXX NOEL: due to the fact that BSD doesn't support 
 	 * vnodes for things not of f_type DTYPE_VNODE we
 	 * currently can't handle pipes. This will be fixed as
@@ -1967,24 +1974,26 @@ zfs_ioc_recvbackup(zfs_cmd_t *zc)
 	 * interface to write to PIPE objects.
 	 */
 	if ((error = file_vnode_withvid(fd, &vp, NULL)))
-	       return (EBADF);	
-
-	error = dmu_recvbackup(zc->zc_value, &zc->zc_begin_record,
-	    &zc->zc_cookie, (boolean_t)zc->zc_guid, vp,
-	    zc->zc_history_offset);
-
+		return (EBADF);	
+	
+	
+ 	error = dmu_recvbackup(zc->zc_value, &zc->zc_begin_record,
+						   &zc->zc_cookie, (boolean_t)zc->zc_guid, vp,
+						   zc->zc_history_offset);
+	
+	
 	new_off = zc->zc_history_offset + zc->zc_cookie;
 	
 	/* This was implemented as VOP_SEEK but we don't support that
 	 * and all the SEEK does is this boundry checking
 	 */
 	if ((new_off < 0 || new_off > MAXOFFSET_T))
-			error = EINVAL;
+		error = EINVAL;
 	else
 		zc->zc_history_offset = new_off;
 	
 	file_drop(fd);
-
+	
 	return (error);
 }
 
@@ -1996,29 +2005,6 @@ zfs_ioc_sendbackup(zfs_cmd_t *zc)
 	struct vnode *vp;
 	int error;
 
-	error = dmu_objset_open(zc->zc_name, DMU_OST_ANY,
-	    DS_MODE_STANDARD | DS_MODE_READONLY, &tosnap);
-	if (error)
-		return (error);
-
-	if (zc->zc_value[0] != '\0') {
-		char buf[MAXPATHLEN];
-		char *cp;
-
-		(void) strncpy(buf, zc->zc_name, sizeof (buf));
-		cp = strchr(buf, '@');
-		if (cp)
-			*(cp+1) = 0;
-		(void) strncat(buf, zc->zc_value, sizeof (buf));
-		error = dmu_objset_open(buf, DMU_OST_ANY,
-		    DS_MODE_STANDARD | DS_MODE_READONLY, &fromsnap);
-		if (error) {
-			dmu_objset_close(tosnap);
-			return (error);
-		}
-	}
-
-
 	/*XXX NOEL: due to the fact that BSD doesn't support 
 	 * vnodes for things not of f_type DTYPE_VNODE we
 	 * currently can't handle pipes. This will be fixed as
@@ -2026,18 +2012,18 @@ zfs_ioc_sendbackup(zfs_cmd_t *zc)
 	 * interface to write to PIPE objects.
 	 */
 	if ((error = file_vnode_withvid(zc->zc_cookie, &vp, NULL))) {
-		dmu_objset_close(tosnap);
-		if (fromsnap)
-			dmu_objset_close(fromsnap);
-		return (EBADF);
-	}
-
+ 		dmu_objset_close(tosnap);
+ 		if (fromsnap)
+ 			dmu_objset_close(fromsnap);
+ 		return (EBADF);
+ 	}
+	
 	error = dmu_sendbackup(tosnap, fromsnap, vp);
-
+	
 	file_drop(zc->zc_cookie);
-	if (fromsnap)
-		dmu_objset_close(fromsnap);
-	dmu_objset_close(tosnap);
+ 	if (fromsnap)
+ 		dmu_objset_close(fromsnap);
+ 	dmu_objset_close(tosnap);
 	return (error);
 }
 
@@ -2212,9 +2198,9 @@ zfs_ioc_share(zfs_cmd_t *zc)
 }
 
 /*
- * pool destroy and pool export don't log the history as part of zfsdev_ioctl,
- * but rather zfs_ioc_pool_create, and zfs_ioc_pool_export do the loggin
- * of those commands.
+ * pool create, destroy, and export don't log the history as part of
+ * zfsdev_ioctl, but rather zfs_ioc_pool_create, and zfs_ioc_pool_export
+ * do the logging of those commands.
  */
 static zfs_ioc_vec_t zfs_ioc_vec[] = {
 	{ zfs_ioc_pool_create, zfs_secpolicy_config, POOL_NAME, B_FALSE },
@@ -2270,19 +2256,21 @@ static zfs_ioc_vec_t zfs_ioc_vec[] = {
 
 static int
 #ifdef __APPLE__
- zfsdev_ioctl(dev_t dev, u_long cmd, caddr_t data,  __unused int flag, struct proc *p)
+zfsdev_ioctl(dev_t dev, u_long cmd, caddr_t data,  __unused int flag, struct proc *p)
 #else
- zfsdev_ioctl(dev_t dev, int cmd, intptr_t arg, int flag, cred_t *cr, int *rvalp)
+zfsdev_ioctl(dev_t dev, int cmd, intptr_t arg, int flag, cred_t *cr, int *rvalp)
 #endif
 {
 	zfs_cmd_t *zc;
 	uint_t vec;
 	int error, rc;
+#ifdef __APPLE__
 	cred_t *cr;
+#endif
 
 #ifndef __APPLE__ 
 	if (getminor(dev) != 0)
-		return (zvol_ioctl(dev, cmd, data, p));
+		return (zvol_ioctl(dev, cmd, arg, flag, cr, rvalp));
 #endif
 
 #ifdef __APPLE__
@@ -2293,6 +2281,7 @@ static int
 	error = zfs_ioc_vec[vec].zvec_secpolicy(zc, cr);
 #else
 	vec = cmd - ZFS_IOC;
+	ASSERT3U(getmajor(dev), ==, ddi_driver_major(zfs_dip));
 
 	if (vec >= sizeof (zfs_ioc_vec) / sizeof (zfs_ioc_vec[0]))
 		return (EINVAL);
@@ -2327,24 +2316,8 @@ static int
 		}
 	}
 
-	if (error == 0) {
+	if (error == 0)
 		error = zfs_ioc_vec[vec].zvec_func(zc);
-		if (error == 0) {
-			if (zfs_ioc_vec[vec].zvec_his_log == B_TRUE)
-				zfs_log_history(zc);
-		} else {
-#ifdef ZFS_DEBUG
-			printf("[%s] zvec_func[%d]: error %d\n", __FUNCTION__ , vec, error);
-#endif
-		}
-	}
-
-	/* 
-	 * Return the real error in zc_ioc_error so the ioctl
-	 * call always does a copyout of the zc data
-	 */
-	zc->zc_ioc_error = error;
-	error = 0;
 
 #ifndef __APPLE__
 	rc = xcopyout(zc, (void *)arg, sizeof (zfs_cmd_t));

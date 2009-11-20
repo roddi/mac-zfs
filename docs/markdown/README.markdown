@@ -1,0 +1,3 @@
+# Future User Friendly Documentation
+
+Planning for the future...

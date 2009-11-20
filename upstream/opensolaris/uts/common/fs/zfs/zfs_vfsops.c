@@ -955,9 +955,9 @@ zfs_vfs_unmount(struct mount *mp, int mntflags, vfs_context_t context)
 	/*
 	 * Evict all dbufs so that cached znodes will be freed
 	 */
-	if (dmu_objset_evict_dbufs(os, B_TRUE)) {
+	if (dmu_objset_evict_dbufs(os)) {
 		txg_wait_synced(dmu_objset_pool(zfsvfs->z_os), 0);
-		(void) dmu_objset_evict_dbufs(os, B_FALSE);
+		(void) dmu_objset_evict_dbufs(os);
 	}
 
 	/*

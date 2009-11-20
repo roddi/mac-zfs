@@ -37,11 +37,12 @@
 #include <sys/types.h>
 #ifndef __APPLE__
 #include <sys/varargs.h>
-#include <ucred.h>
 #endif /*!__APPLE__*/
 #include <sys/fs/zfs.h>
 #include <sys/avl.h>
-#ifdef __APPLE__
+#ifndef __APPLE__
+#include <ucred.h>
+#else
 #include <sys/ucred.h>
 #endif
 
@@ -49,7 +50,6 @@
 extern "C" {
 #endif
 
- 
 /*
  * Miscellaneous ZFS constants
  */
@@ -304,8 +304,9 @@ struct zfs_cmd;
 extern char *zpool_vdev_name(libzfs_handle_t *, zpool_handle_t *, nvlist_t *);
 extern int zpool_upgrade(zpool_handle_t *);
 extern int zpool_get_history(zpool_handle_t *, nvlist_t **);
-extern void zpool_stage_history(libzfs_handle_t *, int, char **,
-    boolean_t zfs_cmd);
+extern void zpool_set_history_str(const char *subcommand, int argc,
+    char **argv, char *history_str);
+extern int zpool_stage_history(libzfs_handle_t *, const char *);
 extern void zpool_obj_to_path(zpool_handle_t *, uint64_t, uint64_t, char *,
     size_t len);
 extern int zfs_ioctl(libzfs_handle_t *, int, struct zfs_cmd *);

@@ -40,16 +40,20 @@
  * Volumes are persistent through reboot.  No user command needs to be
  * run before opening and using a device.
  */
-#if 0
+#ifndef __APPLE__
 
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/errno.h>
-//#include <sys/aio_req.h>
+#ifndef __APPLE__
+#include <sys/aio_req.h>
+#endif
 #include <sys/uio.h>
 #include <sys/buf.h>
-//#include <sys/modctl.h>
-//#include <sys/open.h>
+#ifndef __APPLE__
+#include <sys/modctl.h>
+#include <sys/open.h>
+#endif
 #include <sys/kmem.h>
 #include <sys/conf.h>
 #include <sys/cmn_err.h>
@@ -59,21 +63,27 @@
 #include <sys/zio.h>
 #include <sys/dsl_prop.h>
 #include <sys/dkio.h>
-//#include <sys/efi_partition.h>
+#ifndef __APPLE__
+#include <sys/efi_partition.h>
+#endif
 #include <sys/byteorder.h>
 #include <sys/pathname.h>
-//#include <sys/ddi.h>
-//#include <sys/sunddi.h>
-//#include <sys/crc32.h>
+#ifndef __APPLE__
+#include <sys/ddi.h>
+#include <sys/sunddi.h>
+#include <sys/crc32.h>
+#endif
 #include <sys/dirent.h>
-//#include <sys/policy.h>
+#ifndef __APPLE__
+#include <sys/policy.h>
+#endif
 #include <sys/fs/zfs.h>
 #include <sys/zfs_ioctl.h>
-//#include <sys/mkdev.h>
+#ifndef __APPLE__
+#include <sys/mkdev.h>
+#endif
 #include <sys/zil.h>
 #include <sys/refcount.h>
-
-#include <sys/zvol.h>
 #include <sys/zfs_znode.h>
 #include <sys/zfs_rlock.h>
 
@@ -123,7 +133,7 @@ static void
 zvol_size_changed(zvol_state_t *zv, major_t maj)
 {
 #ifndef __APPLE__
-	dev = makedevice(getmajor(dev), zv->zv_minor);
+	dev_t dev = makedevice(maj, zv->zv_minor);
 
 	VERIFY(ddi_prop_update_int64(dev, zfs_dip,
 	    "Size", zv->zv_volsize) == DDI_SUCCESS);
@@ -194,7 +204,7 @@ zvol_get_stats(objset_t *os, nvlist_t *nv)
 /*
  * Find a free minor number.
  */
-#if 0
+#ifndef __APPLE__
 static minor_t
 zvol_minor_alloc(void)
 {
@@ -335,7 +345,7 @@ zvol_create_minor(const char *name, dev_t dev)
 zvol_create_minor(const char *name, major_t maj)
 #endif
 {
-#if 0
+#ifndef __APPLE__
 	zvol_state_t *zv;
 	objset_t *os;
 	dmu_object_info_t doi;
@@ -831,7 +841,7 @@ zvol_log_write(zvol_state_t *zv, dmu_tx_t *tx, offset_t off, ssize_t len)
 int
 zvol_strategy(buf_t *bp)
 {
-#if 0
+#ifndef __APPLE__
 	zvol_state_t *zv = ddi_get_soft_state(zvol_state, getminor(bp->b_edev));
 	uint64_t off, volsize;
 	size_t size, resid;
@@ -873,7 +883,6 @@ zvol_strategy(buf_t *bp)
 	/*
 	 * There must be no buffer changes when doing a dmu_sync() because
 	 * we can't change the data whilst calculating the checksum.
-	 * A better approach than a per zvol rwlock would be to lock ranges.
 	 */
 	reading = bp->b_flags & B_READ;
 	rl = zfs_range_lock(&zv->zv_znode, off, resid,
@@ -1008,7 +1017,7 @@ zvol_write(dev_t dev, uio_t *uio, cred_t *cr)
  * Dirtbag ioctls to support mkfs(1M) for UFS filesystems.  See dkio(7I).
  */
 /*ARGSUSED*/
-#if 0
+#ifndef __APPLE__
 int
 zvol_ioctl(dev_t dev, int cmd, intptr_t arg, int flag, cred_t *cr, int *rvalp)
 {

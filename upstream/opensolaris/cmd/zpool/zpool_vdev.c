@@ -131,7 +131,7 @@ vdev_error(const char *fmt, ...)
 	va_end(ap);
 }
 
-#if 0
+#ifndef __APPLE__
 static void
 libdiskmgt_error(int error)
 {
@@ -149,14 +149,21 @@ libdiskmgt_error(int error)
 /*
  * Validate a device, passing the bulk of the work off to libdiskmgt.
  */
-int
+static int
 check_slice(const char *path, int force, boolean_t wholedisk, boolean_t isspare)
 {
 	char *msg;
 	int error = 0;
+	dm_who_type_t who;
 
-	if (dm_inuse((char *)path, &msg, isspare ? DM_WHO_ZPOOL_SPARE :
-	    (force ? DM_WHO_ZPOOL_FORCE : DM_WHO_ZPOOL), &error) || error) {
+	if (force)
+		who = DM_WHO_ZPOOL_FORCE;
+	else if (isspare)
+		who = DM_WHO_ZPOOL_SPARE;
+	else
+		who = DM_WHO_ZPOOL;
+
+	if (dm_inuse((char *)path, &msg, who, &error) || error) {
 		if (error != 0) {
 			libdiskmgt_error(error);
 			return (0);
@@ -265,7 +272,7 @@ check_disk(const char *name, dm_descriptor_t disk, int force, int isspare)
 /*
  * Validate a device.
  */
-int
+static int
 check_device(const char *path, boolean_t force, boolean_t isspare)
 {
 	dm_descriptor_t desc;
@@ -292,7 +299,7 @@ check_device(const char *path, boolean_t force, boolean_t isspare)
  * Check that a file is valid.  All we can do in this case is check that it's
  * not in use by another pool, and not in use by swap.
  */
-int
+static int
 check_file(const char *file, boolean_t force, boolean_t isspare)
 {
 	char  *name;
@@ -409,7 +416,7 @@ static nvlist_t *
 make_leaf_vdev(const char *arg, uint64_t is_log)
 {
 	char path[MAXPATHLEN];
-	struct stat statbuf;
+	struct stat64 statbuf;
 	nvlist_t *vdev = NULL;
 	char *type = NULL;
 	boolean_t wholedisk = B_FALSE;
@@ -425,7 +432,7 @@ make_leaf_vdev(const char *arg, uint64_t is_log)
 		 * examining the file descriptor afterwards.
 		 */
 		wholedisk = is_whole_disk(arg);
-		if (!wholedisk && (stat(arg, &statbuf) != 0)) {
+		if (!wholedisk && (stat64(arg, &statbuf) != 0)) {
 			(void) fprintf(stderr,
 			    gettext("cannot open '%s': %s\n"),
 			    arg, strerror(errno));
@@ -443,7 +450,7 @@ make_leaf_vdev(const char *arg, uint64_t is_log)
 		(void) snprintf(path, sizeof (path), "%s/%s", DISK_ROOT,
 		    arg);
 		wholedisk = is_whole_disk(path);
-		if (!wholedisk && (stat(path, &statbuf) != 0)) {
+		if (!wholedisk && (stat64(path, &statbuf) != 0)) {
 			/*
 			 * If we got ENOENT, then the user gave us
 			 * gibberish, so try to direct them with a
@@ -634,7 +641,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 			for (c = 0; c < children; c++) {
 				nvlist_t *cnv = child[c];
 				char *path;
-				struct stat statbuf;
+				struct stat64 statbuf;
 				uint64_t size = -1ULL;
 				char *childtype;
 				int fd, err;
@@ -704,10 +711,10 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 				 * this device altogether.
 				 */
 				if ((fd = open(path, O_RDONLY)) >= 0) {
-					err = fstat(fd, &statbuf);
+					err = fstat64(fd, &statbuf);
 					(void) close(fd);
 				} else {
-					err = stat(path, &statbuf);
+					err = stat64(path, &statbuf);
 				}
 
 				if (err != 0 ||
@@ -931,7 +938,7 @@ make_disks(zpool_handle_t *zhp, nvlist_t *nv)
 		    &wholedisk) != 0 || !wholedisk)
 			return (0);
 
-#if 0
+#ifndef __APPLE__
 		diskname = strrchr(path, '/');
 		assert(diskname != NULL);
 		diskname++;
@@ -993,7 +1000,7 @@ make_disks(zpool_handle_t *zhp, nvlist_t *nv)
 	return (0);
 }
 
-#if 0
+#ifndef __APPLE__
 /*
  * Determine if the given path is a hot spare within the given configuration.
  */
@@ -1047,11 +1054,11 @@ is_spare(nvlist_t *config, const char *path)
  * Go through and find any devices that are in use.  We rely on libdiskmgt for
  * the majority of this task.
  */
-int
+static int
 check_in_use(nvlist_t *config, nvlist_t *nv, int force, int isreplacing,
     int isspare)
 {
-#if 0
+#ifndef __APPLE__
 	nvlist_t **child;
 	uint_t c, children;
 	char *type, *path;
@@ -1102,7 +1109,6 @@ check_in_use(nvlist_t *config, nvlist_t *nv, int force, int isreplacing,
 			if ((ret = check_in_use(config, child[c], force,
 			    isreplacing, B_TRUE)) != 0)
 				return (ret);
-
 #endif
 	return (0);
 }

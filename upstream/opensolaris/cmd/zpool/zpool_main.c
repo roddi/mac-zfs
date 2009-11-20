@@ -22,7 +22,7 @@
 /*
  * Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
-  * Portions Copyright 2007 Apple Inc. All rights reserved.
+ * Portions Copyright 2007 Apple Inc. All rights reserved.
  * Use is subject to license terms.
  */
 
@@ -43,18 +43,18 @@
 #include <strings.h>
 #include <unistd.h>
 #ifdef __APPLE__
+#include <pwd.h>
 #include <paths.h>
 #include <sys/zfs_ioctl.h>
 #include "libzfs_ioctl.h"
 #else
 #include <priv.h>
+#include <pwd.h>
 #include <zone.h>
 #endif
 #include <sys/fs/zfs.h>
 
 #include <sys/stat.h>
-#include <pwd.h>
-
 
 #include <libzfs.h>
 
@@ -184,6 +184,7 @@ static zpool_command_t command_table[] = {
 #define	NCOMMAND	(sizeof (command_table) / sizeof (command_table[0]))
 
 zpool_command_t *current_command;
+static char history_str[HIS_MAX_RECORD_LEN];
 
 static const char *
 get_usage(zpool_help_t idx) {
@@ -701,7 +702,7 @@ zpool_do_create(int argc, char **argv)
 	    (strcmp(mountpoint, ZFS_MOUNTPOINT_LEGACY) != 0 &&
 	    strcmp(mountpoint, ZFS_MOUNTPOINT_NONE) != 0)) {
 		char buf[MAXPATHLEN];
-		struct stat statbuf;
+		struct stat64 statbuf;
 
 		if (mountpoint && mountpoint[0] != '/') {
 			(void) fprintf(stderr, gettext("invalid mountpoint "
@@ -732,7 +733,7 @@ zpool_do_create(int argc, char **argv)
 				    mountpoint);
 		}
 
-		if (stat(buf, &statbuf) == 0 &&
+		if (stat64(buf, &statbuf) == 0 &&
 		    statbuf.st_nlink != 2) {
 			if (mountpoint == NULL)
 				(void) fprintf(stderr, gettext("default "
@@ -1472,7 +1473,7 @@ zpool_do_import(int argc, char **argv)
 			(void) fprintf(stderr, gettext("too many arguments\n"));
 			usage(B_FALSE);
 		}
-#if 0
+#ifndef __APPLE__
 		/*
 		 * Check for the SYS_CONFIG privilege.  We do this explicitly
 		 * here because otherwise any attempt to discover pools will
@@ -3822,17 +3823,14 @@ main(int argc, char **argv)
 
 	cmdname = argv[1];
 
-	/* Handle special case of pool create for staging history */
-	if (strcmp(cmdname, "create") != 0)
-		zpool_stage_history(g_zfs, argc, argv, B_FALSE);
-	else
-		zpool_stage_history(g_zfs, argc, argv, B_FALSE);
-
 	/*
 	 * Special case '-?'
 	 */
 	if (strcmp(cmdname, "-?") == 0)
 		usage(B_TRUE);
+
+	zpool_set_history_str("zpool", argc, argv, history_str);
+	verify(zpool_stage_history(g_zfs, history_str) == 0);
 
 	/*
 	 * Run the appropriate command.

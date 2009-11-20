@@ -67,8 +67,7 @@ libzfs_handle_t *g_zfs;
 #ifndef __APPLE__
 static FILE *mnttab_file;
 #endif /*!__APPLE__*/
-static int first_argc;
-static char **first_argv;
+static char history_str[HIS_MAX_RECORD_LEN];
 
 static int zfs_do_clone(int argc, char **argv);
 static int zfs_do_create(int argc, char **argv);
@@ -1309,7 +1308,7 @@ same_pool(zfs_handle_t *zhp, const char *name)
 
 	if (len1 != len2)
 		return (B_FALSE);
-	return (strncmp(name, zhname, len1) != 0);
+	return (strncmp(name, zhname, len1) == 0);
 }
 
 static int
@@ -1365,8 +1364,7 @@ upgrade_set_callback(zfs_handle_t *zhp, void *data)
 			 * be doing ioctls to different pools.  We need
 			 * to log this history once to each pool.
 			 */
-			zpool_stage_history(g_zfs, first_argc, first_argv,
-			    B_TRUE);
+			verify(zpool_stage_history(g_zfs, history_str) == 0);
 		}
 		if (zfs_prop_set(zhp, "version", verstr) == 0)
 			cb->cb_numupgraded++;
@@ -3288,7 +3286,7 @@ unshare_unmount_path(int op, char *path, int flags, boolean_t is_manual)
 	 * or "//"), we stat() the path and search for the corresponding
 	 * (major,minor) device pair.
 	 */
-	if (stat(path, &statbuf) != 0) {
+	if (stat64(path, &statbuf) != 0) {
 		(void) fprintf(stderr, gettext("cannot %s '%s': %s\n"),
 		    cmdname, path, strerror(errno));
 		return (1);
@@ -3315,6 +3313,7 @@ unshare_unmount_path(int op, char *path, int flags, boolean_t is_manual)
 	if ((zhp = zfs_open(g_zfs, sfsp->f_mntfromname, ZFS_TYPE_FILESYSTEM)) == NULL)
 		return (1);
 #else
+
 	/*
 	 * Search for the given (major,minor) pair in the mount table.
 	 */
@@ -3470,16 +3469,15 @@ unshare_unmount(int op, int argc, char **argv)
 #endif
 
 			/* ignore non-ZFS entries */
-			if (strcmp(sfsp->f_fstypename, MNTTYPE_ZFS) != 0) {
+			if (strcmp(sfsp->f_fstypename, MNTTYPE_ZFS) != 0)
 				++sfsp;
-				continue;
-			}
+
 			/* ignore snapshots */
-			if (strchr(sfsp->f_mntfromname, '@') != NULL) {
+			if (strchr(sfsp->f_mntfromname, '@') != NULL)
 				++sfsp;
-				continue;
-			}
-			if ((zhp = zfs_open(g_zfs, sfsp->f_mntfromname, ZFS_TYPE_FILESYSTEM)) == NULL) {
+
+			if ((zhp = zfs_open(g_zfs, sfsp->f_mntfromname,
+			    ZFS_TYPE_FILESYSTEM)) == NULL) {
 				ret = 1;
 				++sfsp;
 				continue;
@@ -3496,7 +3494,6 @@ unshare_unmount(int op, int argc, char **argv)
 			    (op == OP_MOUNT &&
 			    strcmp(property, "legacy") == 0)) {
 				zfs_close(zhp);
-				++sfsp;
 				continue;
 			}
 
@@ -3519,7 +3516,6 @@ unshare_unmount(int op, int argc, char **argv)
 				free(node->un_mountp);
 				free(node);
 			}
-			++sfsp;
 		}
 
 		/*
@@ -3907,16 +3903,14 @@ main(int argc, char **argv)
 
 	opterr = 0;
 
-	first_argc = argc;
-	first_argv = argv;
-
 	if ((g_zfs = libzfs_init()) == NULL) {
 		(void) fprintf(stderr, gettext("internal error: failed to "
 		    "initialize ZFS library\n"));
 		return (1);
 	}
 
-	zpool_stage_history(g_zfs, argc, argv, B_TRUE);
+	zpool_set_history_str("zfs", argc, argv, history_str);
+	verify(zpool_stage_history(g_zfs, history_str) == 0);
 
 	libzfs_print_on_error(g_zfs, B_TRUE);
 
