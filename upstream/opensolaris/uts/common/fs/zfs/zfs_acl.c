@@ -1050,7 +1050,7 @@ zfs_perm_init(znode_t *zp, znode_t *parent, int flag,
 		uid = crgetuid(cr);
 		if ((vap->va_mask & AT_GID) &&
 		    ((vap->va_gid == parent->z_phys->zp_gid) ||
-		    groupmember(vap->va_gid, cr) ||
+		    groupmember(vap->va_gid, (kauth_cred_t) cr) ||
 		    secpolicy_vnode_create_gid(cr) == 0))
 			gid = vap->va_gid;
 		else
@@ -1583,7 +1583,7 @@ zfs_zaccess_common(znode_t *zp, int v4_mode, int *working_mode, cred_t *cr)
 			else
 				gid = zacep[i].a_who;
 
-			if (groupmember(gid, cr)) {
+			if (groupmember(gid, (kauth_cred_t) cr)) {
 				access_deny = zfs_ace_access(&zacep[i],
 				    working_mode);
 			}

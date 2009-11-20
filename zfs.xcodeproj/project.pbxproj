@@ -2208,7 +2208,7 @@
 					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 					"-isystem",
 					"\"$(SRCROOT)/upstream/opensolaris/common/sys\"",
-					"-iquote",
+					"-isystem",
 					"\"$(SRCROOT)/upstream/opensolaris/common/zfs\"",
 					"-include",
 					"\"$(SRCROOT)/upstream/opensolaris/common/sys/types.h\"",

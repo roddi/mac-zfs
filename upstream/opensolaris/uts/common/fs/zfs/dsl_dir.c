@@ -99,7 +99,6 @@ dsl_dir_open_obj(dsl_pool_t *dp, uint64_t ddobj,
 	/* XXX assert bonus buffer size is correct */
 	if (dd == NULL) {
 		dsl_dir_t *winner;
-		int err;
 
 		dd = kmem_zalloc(sizeof (dsl_dir_t), KM_SLEEP);
 		dd->dd_object = ddobj;

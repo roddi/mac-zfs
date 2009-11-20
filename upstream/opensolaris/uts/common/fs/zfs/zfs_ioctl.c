@@ -158,12 +158,12 @@ history_str_get(zfs_cmd_t *zc)
 {
 	char *buf;
 
-	if (zc->zc_history == NULL)
+	if (zc->zc_history == 0)
 		return (NULL);
 
 	buf = kmem_alloc(HIS_MAX_RECORD_LEN, KM_SLEEP);
 #ifdef __APPLE__
-	if (xcopyin((void *)(uintptr_t)zc->zc_history,
+	if (xcopyin(zc->zc_history,
 	    buf, HIS_MAX_RECORD_LEN) != 0) {
 #else
 	if (copyinstr((void *)(uintptr_t)zc->zc_history,
@@ -676,7 +676,7 @@ get_nvlist(zfs_cmd_t *zc, nvlist_t **nvp)
 
 	packed = kmem_alloc(size, KM_SLEEP);
 
-	if ((error = xcopyin((void *)(uintptr_t)zc->zc_nvlist_src, packed,
+	if ((error = xcopyin(zc->zc_nvlist_src, packed,
 	    size)) != 0) {
 		kmem_free(packed, size);
 		return (error);
@@ -708,7 +708,7 @@ put_nvlist(zfs_cmd_t *zc, nvlist_t *nvl)
 		packed = kmem_alloc(size, KM_SLEEP);
 		VERIFY(nvlist_pack(nvl, &packed, &size, NV_ENCODE_NATIVE,
 		    KM_SLEEP) == 0);
-		error = xcopyout(packed, (void *)(uintptr_t)zc->zc_nvlist_dst,
+		error = xcopyout(packed, zc->zc_nvlist_dst,
 		    size);
 		kmem_free(packed, size);
 	}
@@ -918,7 +918,7 @@ zfs_ioc_pool_get_history(zfs_cmd_t *zc)
 	if ((error = spa_history_get(spa, &zc->zc_history_offset,
 	    &zc->zc_history_len, hist_buf)) == 0) {
 		error = xcopyout(hist_buf,
-		    (char *)(uintptr_t)zc->zc_history,
+		    zc->zc_history,
 		    zc->zc_history_len);
 	}
 
@@ -1554,7 +1554,7 @@ zfs_ioc_pool_get_props(zfs_cmd_t *zc)
 
 	error = spa_get_props(spa, &nvp);
 
-	if (error == 0 && zc->zc_nvlist_dst != NULL)
+	if (error == 0 && zc->zc_nvlist_dst != 0)
 		error = put_nvlist(zc, nvp);
 	else
 		error = EFAULT;
@@ -1754,7 +1754,7 @@ zfs_ioc_create(zfs_cmd_t *zc)
 	if (strchr(zc->zc_name, '@'))
 		return (EINVAL);
 
-	if (zc->zc_nvlist_src != NULL &&
+	if (zc->zc_nvlist_src != 0 &&
 	    (error = get_nvlist(zc, &nvprops)) != 0)
 		return (error);
 
