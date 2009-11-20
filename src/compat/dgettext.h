@@ -1,2 +1,2 @@
-const char *dgettext(const char *domain, const char *msgid);
-const char *gettext(const char *msg);
+const char *dgettext(const char *domain, char *msgid);
+const char *gettext(char *msg);

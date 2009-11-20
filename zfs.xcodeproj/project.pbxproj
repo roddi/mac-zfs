@@ -158,6 +158,9 @@
 		967B9F8C109CD6300062214D /* zfs.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9661E69F109ACD6E006593D6 /* zfs.plist */; };
 		967B9F8E109CD6530062214D /* zfs.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9661E6A0109ACD6E006593D6 /* zfs.txt */; };
 		967B9FB2109CD74E0062214D /* zoink.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E727109ACD6E006593D6 /* zoink.c */; };
+		96A0008D10B61B1C00C2A209 /* libmaczfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A9F8BD109C24E30050AF13 /* libmaczfs.dylib */; };
+		96A0FF3310B60A6600C2A209 /* libmaczfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A9F8BD109C24E30050AF13 /* libmaczfs.dylib */; };
+		96A0FF3C10B60A8800C2A209 /* libmaczfs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A9F8BD109C24E30050AF13 /* libmaczfs.dylib */; };
 		96A9F7DD109C1CD60050AF13 /* zfs_iter.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E64C109ACD6D006593D6 /* zfs_iter.c */; };
 		96A9F7DE109C1CD60050AF13 /* zfs_main.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E64E109ACD6D006593D6 /* zfs_main.c */; };
 		96A9F841109C20730050AF13 /* uu_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E635109ACD6D006593D6 /* uu_alloc.c */; };
@@ -308,6 +311,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 96A9F82B109C20520050AF13;
 			remoteInfo = libuutil;
+		};
+		96A0008B10B61B1400C2A209 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			remoteInfo = libmaczfs;
+		};
+		96A0FF3110B60A5C00C2A209 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			remoteInfo = libmaczfs;
+		};
+		96A0FF3F10B60A8B00C2A209 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			remoteInfo = libmaczfs;
 		};
 		DAD6B3F610940D03008A0395 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -665,6 +689,7 @@
 				967B9E3C109CD02C0062214D /* libdevid.dylib in Frameworks */,
 				96A9F9BD109CB1CC0050AF13 /* libuutil.dylib in Frameworks */,
 				967B9DE7109CCDFD0062214D /* libnvpair.dylib in Frameworks */,
+				96A0FF3310B60A6600C2A209 /* libmaczfs.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +697,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96A0FF3C10B60A8800C2A209 /* libmaczfs.dylib in Frameworks */,
 				967B9ED2109CD2D90062214D /* libuutil.dylib in Frameworks */,
 				967B9EDE109CD2F80062214D /* libdevid.dylib in Frameworks */,
 				967B9EE5109CD31E0062214D /* libnvpair.dylib in Frameworks */,
@@ -725,6 +751,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96A0008D10B61B1C00C2A209 /* libmaczfs.dylib in Frameworks */,
 				967B9F29109CD44B0062214D /* libavl.dylib in Frameworks */,
 				967B9F35109CD46D0062214D /* libnvpair.dylib in Frameworks */,
 				967B9F36109CD46D0062214D /* libuutil.dylib in Frameworks */,
@@ -876,15 +903,10 @@
 		9661E61B109ACD6D006593D6 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				9661E61C109ACD6D006593D6 /* lib */,
+				96A0FF5310B60CA300C2A209 /* cmd */,
 				96A9F8B6109C24630050AF13 /* compat */,
-				9661E64B109ACD6D006593D6 /* zfs */,
-				9661E650109ACD6D006593D6 /* zfs-common */,
 				9661E699109ACD6E006593D6 /* zfs-fs */,
 				9661E6A2109ACD6E006593D6 /* zfs-kext */,
-				9661E726109ACD6E006593D6 /* zoink */,
-				9661E728109ACD6E006593D6 /* zpool */,
-				9661E72E109ACD6E006593D6 /* ztest */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1002,18 +1024,17 @@
 			path = zfs;
 			sourceTree = "<group>";
 		};
-		9661E650109ACD6D006593D6 /* zfs-common */ = {
+		9661E650109ACD6D006593D6 /* common */ = {
 			isa = PBXGroup;
 			children = (
 				9661E651109ACD6D006593D6 /* avl */,
-				9661E653109ACD6D006593D6 /* head */,
 				9661E655109ACD6D006593D6 /* nvpair */,
 				9661E658109ACD6D006593D6 /* rpc */,
 				9661E65B109ACD6D006593D6 /* sys */,
 				9661E68F109ACD6D006593D6 /* util */,
 				9661E692109ACD6D006593D6 /* zfs */,
 			);
-			path = "zfs-common";
+			path = common;
 			sourceTree = "<group>";
 		};
 		9661E651109ACD6D006593D6 /* avl */ = {
@@ -1176,9 +1197,6 @@
 			isa = PBXGroup;
 			children = (
 				9661E6A3109ACD6E006593D6 /* Info.plist */,
-				9661E6A4109ACD6E006593D6 /* os */,
-				9661E6AA109ACD6E006593D6 /* rpc */,
-				9661E6AE109ACD6E006593D6 /* zfs */,
 			);
 			path = "zfs-kext";
 			sourceTree = "<group>";
@@ -1366,6 +1384,62 @@
 			path = ztest;
 			sourceTree = "<group>";
 		};
+		96A0FF4F10B60C2B00C2A209 /* opensolaris */ = {
+			isa = PBXGroup;
+			children = (
+				96A0FF5010B60C4A00C2A209 /* cmd */,
+				9661E650109ACD6D006593D6 /* common */,
+				9661E653109ACD6D006593D6 /* head */,
+				9661E61C109ACD6D006593D6 /* lib */,
+				96A0FF5110B60C8500C2A209 /* uts */,
+			);
+			path = opensolaris;
+			sourceTree = "<group>";
+		};
+		96A0FF5010B60C4A00C2A209 /* cmd */ = {
+			isa = PBXGroup;
+			children = (
+				9661E64B109ACD6D006593D6 /* zfs */,
+				9661E728109ACD6E006593D6 /* zpool */,
+				9661E72E109ACD6E006593D6 /* ztest */,
+			);
+			path = cmd;
+			sourceTree = "<group>";
+		};
+		96A0FF5110B60C8500C2A209 /* uts */ = {
+			isa = PBXGroup;
+			children = (
+				96A0FF5410B60CEC00C2A209 /* common */,
+			);
+			path = uts;
+			sourceTree = "<group>";
+		};
+		96A0FF5310B60CA300C2A209 /* cmd */ = {
+			isa = PBXGroup;
+			children = (
+				9661E726109ACD6E006593D6 /* zoink */,
+			);
+			path = cmd;
+			sourceTree = "<group>";
+		};
+		96A0FF5410B60CEC00C2A209 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				96A0FF7110B60E9800C2A209 /* fs */,
+				9661E6A4109ACD6E006593D6 /* os */,
+				9661E6AA109ACD6E006593D6 /* rpc */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		96A0FF7110B60E9800C2A209 /* fs */ = {
+			isa = PBXGroup;
+			children = (
+				9661E6AE109ACD6E006593D6 /* zfs */,
+			);
+			path = fs;
+			sourceTree = "<group>";
+		};
 		96A9F8B6109C24630050AF13 /* compat */ = {
 			isa = PBXGroup;
 			children = (
@@ -1378,6 +1452,7 @@
 		96A9F906109C273B0050AF13 /* upstream */ = {
 			isa = PBXGroup;
 			children = (
+				96A0FF4F10B60C2B00C2A209 /* opensolaris */,
 			);
 			path = upstream;
 			sourceTree = "<group>";
@@ -1482,6 +1557,7 @@
 				967B9F11109CD3F10062214D /* PBXTargetDependency */,
 				967B9F13109CD3F10062214D /* PBXTargetDependency */,
 				967B9F15109CD3F10062214D /* PBXTargetDependency */,
+				96A0FF3210B60A5C00C2A209 /* PBXTargetDependency */,
 			);
 			name = libzfs;
 			productName = libzfs;
@@ -1498,6 +1574,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				96A0FF4010B60A8B00C2A209 /* PBXTargetDependency */,
 				967B9EF1109CD3480062214D /* PBXTargetDependency */,
 				967B9EF3109CD34D0062214D /* PBXTargetDependency */,
 				967B9EF5109CD3540062214D /* PBXTargetDependency */,
@@ -1534,6 +1611,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				96A0008C10B61B1400C2A209 /* PBXTargetDependency */,
 				26B5F1D20AB7DC6A009860FF /* PBXTargetDependency */,
 			);
 			name = zfs;
@@ -2055,6 +2133,21 @@
 			target = 96A9F82B109C20520050AF13 /* libuutil */;
 			targetProxy = 967B9F14109CD3F10062214D /* PBXContainerItemProxy */;
 		};
+		96A0008C10B61B1400C2A209 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			targetProxy = 96A0008B10B61B1400C2A209 /* PBXContainerItemProxy */;
+		};
+		96A0FF3210B60A5C00C2A209 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			targetProxy = 96A0FF3110B60A5C00C2A209 /* PBXContainerItemProxy */;
+		};
+		96A0FF4010B60A8B00C2A209 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			targetProxy = 96A0FF3F10B60A8B00C2A209 /* PBXContainerItemProxy */;
+		};
 		DAD6B3F710940D03008A0395 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DAD6B3CE109409E4008A0395 /* fix-nofs */;
@@ -2111,21 +2204,20 @@
 				MODULE_VERSION = 8.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common/sys\"",
 					"-iquote",
-					"$(SRCROOT)/src/zfs-common/zfs",
-					"-isystem",
-					"$(SRCROOT)/src/zfs-kext/",
-					"-isystem",
-					"$(SRCROOT)/src/zfs-kext/zfs/",
-					"-isystem",
-					"$(SRCROOT)/src/zfs-common/",
-					"-isystem",
-					"$(SRCROOT)/src/zfs-common/sys/",
+					"\"$(SRCROOT)/upstream/opensolaris/common/zfs\"",
 					"-include",
-					"$(SRCROOT)/src/zfs-common/sys/types.h",
+					"\"$(SRCROOT)/upstream/opensolaris/common/sys/types.h\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common/fs/zfs\"",
 					"-include",
-					"$(SRCROOT)/src/zfs-kext/zfs/sys/zfs_context.h",
-					"-std=gnu99",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common/fs/zfs/sys/zfs_context.h\"",
 				);
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = "";
@@ -2254,7 +2346,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/src/zfs-common/",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 				);
 				OTHER_LDFLAGS = "-lzfs";
 				PREBINDING = NO;
@@ -2339,11 +2431,11 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/src/zfs-common",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 					"-isystem",
-					"$(SRCROOT)/src/zfs-common/zfs",
+					"\"$(SRCROOT)/upstream/opensolaris/common/zfs\"",
 					"-isystem",
-					"$(SRCROOT)/src/zfs-kext/zfs",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common/fs/zfs\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = libzfs;
@@ -2396,13 +2488,11 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/src/libzfs/",
+					"\"$(SRCROOT)/upstream/opensolaris/lib/libzfs\"",
 					"-isystem",
-					"$(SRCROOT)/src/zfs-common/",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 					"-isystem",
-					"$(SRCROOT)/src/zfs-kext/zfs/",
-					"-I",
-					"$(SRCROOT)/src/libzfs/",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common/fs/zfs\"",
 				);
 				OTHER_LDFLAGS = "-lzfs";
 				PREBINDING = NO;
@@ -2473,7 +2563,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/src/zfs-common/",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 				);
 				OTHER_LDFLAGS = "-lcurses";
 				PREBINDING = NO;
@@ -2516,9 +2606,9 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/src/libzfs/",
+					"\"$(SRCROOT)/upstream/opensolaris/lib/libzfs\"",
 					"-isystem",
-					"$(SRCROOT)/src/zfs-common/",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 				);
 				OTHER_LDFLAGS = "-lzfs";
 				PREBINDING = NO;
@@ -2562,7 +2652,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-I",
-					"$(SRCROOT)/src/zfs-common",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = libavl;
@@ -2599,7 +2689,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/src/zfs-common",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = libnvpair;
@@ -2636,11 +2726,11 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-I",
-					"$(SRCROOT)/src/zfs-common",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 					"-I",
-					"$(SRCROOT)/src/zfs-common/sys",
+					"\"$(SRCROOT)/upstream/opensolaris/common/sys\"",
 					"-I",
-					"$(SRCROOT)/src/lib",
+					"\"$(SRCROOT)/upstream/opensolaris/lib\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = libdevid;
@@ -2710,13 +2800,13 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-I",
-					"$(SRCROOT)/src/zfs-common",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 					"-I",
-					"$(SRCROOT)/src/zfs-common/sys",
+					"\"$(SRCROOT)/upstream/opensolaris/common/sys\"",
 					"-I",
-					"$(SRCROOT)/src/lib",
+					"\"$(SRCROOT)/upstream/opensolaris/lib\"",
 					"-I",
-					"$(SRCROOT)/src/lib/libuutil",
+					"\"$(SRCROOT)/upstream/opensolaris/lib/libuutil\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = libuutil;

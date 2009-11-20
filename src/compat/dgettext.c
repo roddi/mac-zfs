@@ -10,13 +10,13 @@
 #include "dgettext.h"
 
 const char *
-dgettext(const char *domain, const char *msgid)
+dgettext(const char *domain, char *msgid)
 {
 	return (msgid);
 }
 
 const char *
-gettext(const char *msg)
+gettext(char *msg)
 {
 	return (msg);
 }
