@@ -316,21 +316,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			remoteGlobalIDString = 96A9F8BC109C24E30050AF13;
 			remoteInfo = libmaczfs;
 		};
 		96A0FF3110B60A5C00C2A209 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			remoteGlobalIDString = 96A9F8BC109C24E30050AF13;
 			remoteInfo = libmaczfs;
 		};
 		96A0FF3F10B60A8B00C2A209 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 96A9F8BC109C24E30050AF13 /* libmaczfs */;
+			remoteGlobalIDString = 96A9F8BC109C24E30050AF13;
 			remoteInfo = libmaczfs;
 		};
 		DAD6B3F610940D03008A0395 /* PBXContainerItemProxy */ = {

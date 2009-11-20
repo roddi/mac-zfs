@@ -8,7 +8,7 @@ they exist in OpenSolaris and keeping them as pure as possible.
 When additional functionality is required by the upstream source
 I hope to find a way to implement it within libmaczfs.
 
-The current ZFS code remains at the b72 level.
+The current ZFS code remains at the onnv_72 level (or so we think).
 
 I don't recommend using this branch as it's likely to be broken
 at various times while I mess with it.
@@ -25,9 +25,9 @@ at various times while I mess with it.
  Full text of the APSL and CDDL.
  
 ## /src
- Currently all of the code is here, however I'd like to have only
- code that is mac-zfs specific in here.
+ I'd like to have only code that is mac-zfs specific in here
+ such as when we need to implement things that are lacking on
+ the Mac OS X platform.
  
 ## /upstream
  This is where the future OpenSolaris code will live.
- Check /devel/scripts/update-upstream.sh to see where it's headed.
