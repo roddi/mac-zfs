@@ -3286,7 +3286,11 @@ unshare_unmount_path(int op, char *path, int flags, boolean_t is_manual)
 	 * or "//"), we stat() the path and search for the corresponding
 	 * (major,minor) device pair.
 	 */
+#if _DARWIN_FEATURE_64_BIT_INODE
+	if (stat(path, &statbuf) != 0) {
+#else
 	if (stat64(path, &statbuf) != 0) {
+#endif
 		(void) fprintf(stderr, gettext("cannot %s '%s': %s\n"),
 		    cmdname, path, strerror(errno));
 		return (1);

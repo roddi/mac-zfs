@@ -38,6 +38,10 @@
 
 #include "zpool_util.h"
 
+#ifdef __APPLE__
+#include "dgettext.h"
+#endif
+
 /*
  * Utility function to guarantee malloc() success.
  */

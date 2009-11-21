@@ -305,7 +305,9 @@ check_file(const char *file, boolean_t force, boolean_t isspare)
 	char  *name;
 	int fd;
 	int ret = 0;
+#ifndef __APPLE__
 	int err;
+#endif
 	pool_state_t state;
 	boolean_t inuse;
 
@@ -384,7 +386,9 @@ check_file(const char *file, boolean_t force, boolean_t isspare)
 static boolean_t
 is_whole_disk(const char *arg)
 {
+#ifndef __APPLE__
 	struct dk_gpt *label;
+#endif
 	int	fd;
 	char	path[MAXPATHLEN];
 
@@ -416,7 +420,11 @@ static nvlist_t *
 make_leaf_vdev(const char *arg, uint64_t is_log)
 {
 	char path[MAXPATHLEN];
+#if _DARWIN_FEATURE_64_BIT_INODE
+	struct stat statbuf;
+#else
 	struct stat64 statbuf;
+#endif
 	nvlist_t *vdev = NULL;
 	char *type = NULL;
 	boolean_t wholedisk = B_FALSE;
@@ -432,7 +440,11 @@ make_leaf_vdev(const char *arg, uint64_t is_log)
 		 * examining the file descriptor afterwards.
 		 */
 		wholedisk = is_whole_disk(arg);
+#if _DARWIN_FEATURE_64_BIT_INODE
+		if (!wholedisk && (stat(arg, &statbuf) != 0)) {
+#else
 		if (!wholedisk && (stat64(arg, &statbuf) != 0)) {
+#endif
 			(void) fprintf(stderr,
 			    gettext("cannot open '%s': %s\n"),
 			    arg, strerror(errno));
@@ -450,8 +462,11 @@ make_leaf_vdev(const char *arg, uint64_t is_log)
 		(void) snprintf(path, sizeof (path), "%s/%s", DISK_ROOT,
 		    arg);
 		wholedisk = is_whole_disk(path);
-		if (!wholedisk && (stat64(path, &statbuf) != 0)) {
-			/*
+#if _DARWIN_FEATURE_64_BIT_INODE
+		if (!wholedisk && (stat(arg, &statbuf) != 0)) {
+#else
+		if (!wholedisk && (stat64(arg, &statbuf) != 0)) {
+#endif			/*
 			 * If we got ENOENT, then the user gave us
 			 * gibberish, so try to direct them with a
 			 * reasonable error message.  Otherwise,
@@ -641,7 +656,11 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 			for (c = 0; c < children; c++) {
 				nvlist_t *cnv = child[c];
 				char *path;
+				#if _DARWIN_FEATURE_64_BIT_INODE
+				struct stat statbuf;
+				#else
 				struct stat64 statbuf;
+				#endif
 				uint64_t size = -1ULL;
 				char *childtype;
 				int fd, err;
@@ -711,10 +730,19 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 				 * this device altogether.
 				 */
 				if ((fd = open(path, O_RDONLY)) >= 0) {
+#if _DARWIN_FEATURE_64_BIT_INODE
+					err = fstat(fd, &statbuf);
+#else
 					err = fstat64(fd, &statbuf);
+#endif
 					(void) close(fd);
 				} else {
+#if _DARWIN_FEATURE_64_BIT_INODE
+					err = stat(path, &statbuf);
+#else
 					err = stat64(path, &statbuf);
+#endif
+					
 				}
 
 				if (err != 0 ||
@@ -912,13 +940,21 @@ make_disks(zpool_handle_t *zhp, nvlist_t *nv)
 {
 	nvlist_t **child;
 	uint_t c, children;
+#ifndef __APPLE__
 	char *type, *path, *diskname;
 	char buf[MAXPATHLEN];
+#else
+	char *type, *path;
+#endif
 	uint64_t wholedisk;
+#ifndef __APPLE__
 	int fd;
+#endif
 	int ret;
+#ifndef __APPLE__
 	ddi_devid_t devid;
 	char *minor = NULL, *devid_str = NULL;
+#endif
 
 	verify(nvlist_lookup_string(nv, ZPOOL_CONFIG_TYPE, &type) == 0);
 

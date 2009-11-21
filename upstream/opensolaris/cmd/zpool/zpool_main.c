@@ -702,8 +702,11 @@ zpool_do_create(int argc, char **argv)
 	    (strcmp(mountpoint, ZFS_MOUNTPOINT_LEGACY) != 0 &&
 	    strcmp(mountpoint, ZFS_MOUNTPOINT_NONE) != 0)) {
 		char buf[MAXPATHLEN];
+#if _DARWIN_FEATURE_64_BIT_INODE
+		struct stat statbuf;
+#else
 		struct stat64 statbuf;
-
+#endif
 		if (mountpoint && mountpoint[0] != '/') {
 			(void) fprintf(stderr, gettext("invalid mountpoint "
 			    "'%s': must be an absolute path, 'legacy', or "
@@ -732,8 +735,11 @@ zpool_do_create(int argc, char **argv)
 				(void) snprintf(buf, sizeof (buf), "%s",
 				    mountpoint);
 		}
-
-		if (stat64(buf, &statbuf) == 0 &&
+#if _DARWIN_FEATURE_64_BIT_INODE
+			if (stat(buf, &statbuf) == 0 &&
+#else
+			if (stat64(buf, &statbuf) == 0 &&
+#endif
 		    statbuf.st_nlink != 2) {
 			if (mountpoint == NULL)
 				(void) fprintf(stderr, gettext("default "
@@ -3850,7 +3856,7 @@ main(int argc, char **argv)
 		char buf[16384];
 		int fd = open(ZFS_DEV, O_RDWR);
 		(void) strcpy((void *)buf, argv[2]);
-		return (!!ioctl(fd, ZFS_IOC_POOL_FREEZE, buf));
+		return (!!ioctl(fd, ZFS_IOC_POOL_FREEZE, (zfs_cmd_t*) buf));
 	} else {
 		(void) fprintf(stderr, gettext("unrecognized "
 		    "command '%s'\n"), cmdname);
