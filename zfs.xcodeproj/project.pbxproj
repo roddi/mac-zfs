@@ -14,8 +14,8 @@
 				96EB232B1099FE87000FF767 /* Build Installer Package */,
 			);
 			dependencies = (
-				26C84C2B0AB75E6C008B950C /* PBXTargetDependency */,
 				DAD6B3F710940D03008A0395 /* PBXTargetDependency */,
+				26C84C2B0AB75E6C008B950C /* PBXTargetDependency */,
 				26C84C290AB75E65008B950C /* PBXTargetDependency */,
 				26B5F16D0AB7CDD9009860FF /* PBXTargetDependency */,
 				262CEB3D0AB9BF7B00582940 /* PBXTargetDependency */,
@@ -36,6 +36,7 @@
 		964B2C73109CDF0800968674 /* zfs_namecheck.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E695109ACD6E006593D6 /* zfs_namecheck.c */; };
 		964B2C74109CDF1F00968674 /* zfs_prop.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E697109ACD6E006593D6 /* zfs_prop.c */; };
 		964B2C75109CDF8B00968674 /* zfs_deleg.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E693109ACD6E006593D6 /* zfs_deleg.c */; };
+		966171E410B7B02F00131C49 /* fix-nofs.m in Sources */ = {isa = PBXBuildFile; fileRef = 9661E60C109ACD13006593D6 /* fix-nofs.m */; };
 		9661E7D5109ADCEC006593D6 /* zpool_iter.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E729109ACD6E006593D6 /* zpool_iter.c */; };
 		9661E7D6109ADCEC006593D6 /* zpool_main.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E72A109ACD6E006593D6 /* zpool_main.c */; };
 		9661E7D7109ADCEC006593D6 /* zpool_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 9661E72B109ACD6E006593D6 /* zpool_util.c */; };
@@ -667,6 +668,12 @@
 		96A9F8B7109C24800050AF13 /* dgettext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dgettext.h; sourceTree = "<group>"; };
 		96A9F8B8109C24800050AF13 /* dgettext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dgettext.c; sourceTree = "<group>"; };
 		96A9F8BD109C24E30050AF13 /* libmaczfs.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmaczfs.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		96FE548D10B7BABF005E9FE2 /* fix-nofs_post-install.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "fix-nofs_post-install.sh"; sourceTree = "<group>"; };
+		96FE548E10B7BAC9005E9FE2 /* Conclusion.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Conclusion.rtf; sourceTree = "<group>"; };
+		96FE548F10B7BAC9005E9FE2 /* License.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = License.rtf; sourceTree = "<group>"; };
+		96FE549010B7BAC9005E9FE2 /* Readme.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Readme.rtf; sourceTree = "<group>"; };
+		96FE549110B7BAC9005E9FE2 /* Welcome.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Welcome.rtf; sourceTree = "<group>"; };
+		96FE549410B7BAE3005E9FE2 /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Background.png; sourceTree = "<group>"; };
 		DAD6B3CF109409E4008A0395 /* fix-nofs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "fix-nofs"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD6B41710940DCF008A0395 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
@@ -843,6 +850,12 @@
 		9661E60B109ACD13006593D6 /* installer */ = {
 			isa = PBXGroup;
 			children = (
+				96FE549410B7BAE3005E9FE2 /* Background.png */,
+				96FE548E10B7BAC9005E9FE2 /* Conclusion.rtf */,
+				96FE548F10B7BAC9005E9FE2 /* License.rtf */,
+				96FE549010B7BAC9005E9FE2 /* Readme.rtf */,
+				96FE549110B7BAC9005E9FE2 /* Welcome.rtf */,
+				96FE548C10B7BABF005E9FE2 /* scripts */,
 				9661E60C109ACD13006593D6 /* fix-nofs.m */,
 			);
 			path = installer;
@@ -1459,6 +1472,14 @@
 			path = upstream;
 			sourceTree = "<group>";
 		};
+		96FE548C10B7BABF005E9FE2 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				96FE548D10B7BABF005E9FE2 /* fix-nofs_post-install.sh */,
+			);
+			path = scripts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1821,7 +1842,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo '/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker\n -build -p ./${BUILT_PRODUCTS_DIR}/Installer/target1/target1.pkg -f ./Debug/target1/\n-b /tmp -ds -v -r ./Installer/Resources/ -i\n./Installer/target1_resources/Info.plist -d\n./Installer/target1_resources/Description.plist'";
+			shellScript = "if [ $CONFIGURATION = \"Release\" ]; then\n/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker \\\n--doc \"$SRCROOT/devel/installer/macZFS Installer.pmdoc\" -o \"$BUILT_PRODUCTS_DIR/macZFS Installer.pkg\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2034,6 +2055,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				966171E410B7B02F00131C49 /* fix-nofs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2178,6 +2200,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2245,98 +2271,23 @@
 			};
 			name = Debug;
 		};
-		1DEB91C508733DAC0010E9CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"NAMEDSTREAMS=1",
-					__APPLE_API_UNSTABLE,
-					__APPLE__,
-					_KERNEL,
-				);
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_SHADOW = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_VARIABLE = NO;
-				INFOPLIST_FILE = zfs_kext/Info.plist;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
-				MODULE_NAME = com.apple.filesystems.zfs;
-				MODULE_START = zfs_module_start;
-				MODULE_STOP = zfs_module_stop;
-				MODULE_VERSION = 8.0;
-				OTHER_CFLAGS = (
-					"-iquote",
-					"$(SRCROOT)/zfs_common/zfs",
-					"-isystem",
-					"$(SRCROOT)/zfs_kext/",
-					"-isystem",
-					"$(SRCROOT)/zfs_kext/zfs/",
-					"-isystem",
-					"$(SRCROOT)/zfs_common/",
-					"-isystem",
-					"$(SRCROOT)/zfs_common/sys/",
-					"-include",
-					"$(SRCROOT)/zfs_common/sys/types.h",
-					"-include",
-					"$(SRCROOT)/zfs_kext/zfs/sys/zfs_context.h",
-					"-std=gnu99",
-				);
-				PRODUCT_NAME = zfs;
-				VERSIONING_SYSTEM = "apple-generic";
-				WARNING_CFLAGS = (
-					"-Wno-unknown-pragmas",
-					"-Wno-missing-braces",
-					"-Wno-sign-compare",
-					"-Wno-parentheses",
-					"-Wno-uninitialized",
-					"-Wno-implicit-function-declaration",
-					"-Wno-unused",
-					"-Wno-trigraphs",
-					"-Wno-char-subscripts",
-					"-Wno-switch",
-				);
-				WRAPPER_EXTENSION = kext;
-			};
-			name = Release;
-		};
 		1DEB91C808733DAC0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SSE41_EXTENSIONS = YES;
 				GCC_ENABLE_SSE42_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 			};
 			name = Debug;
-		};
-		1DEB91C908733DAC0010E9CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-					x86_64,
-				);
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-			};
-			name = Release;
 		};
 		2611F73C0ACDD14700E5D4E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2360,25 +2311,6 @@
 			};
 			name = Debug;
 		};
-		2611F73D0ACDD14700E5D4E2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Filesystems/zfs.fs";
-				OTHER_CFLAGS = (
-					"-isystem",
-					"$(SRCROOT)/zfs_common/",
-				);
-				OTHER_LDFLAGS = "-lzfs";
-				PREBINDING = NO;
-				PRODUCT_NAME = zfs.util;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		2611F7610ACDD4E200E5D4E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2401,25 +2333,6 @@
 			};
 			name = Debug;
 		};
-		2611F7620ACDD4E200E5D4E2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = zfs_bundle/Info.plist;
-				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Filesystems";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = zfs;
-				WRAPPER_EXTENSION = fs;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		269640730AACEAFA0073456B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2428,6 +2341,10 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2447,38 +2364,6 @@
 				ZERO_LINK = NO;
 			};
 			name = Debug;
-		};
-		269640740AACEAFA0073456B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = "TEXT_DOMAIN=0";
-				INSTALL_PATH = /usr/lib;
-				OTHER_CFLAGS = (
-					"-isystem",
-					"$(SRCROOT)/zfs_lib/",
-					"-isystem",
-					"$(SRCROOT)/zfs_lib/libzfs/",
-					"-isystem",
-					"$(SRCROOT)/zfs_lib/libuutil/",
-					"-isystem",
-					"$(SRCROOT)/zfs_lib/libnvpair/",
-					"-isystem",
-					"$(SRCROOT)/zfs_common/",
-					"-isystem",
-					"$(SRCROOT)/zfs_kext/zfs/",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = libzfs;
-				ZERO_LINK = NO;
-			};
-			name = Release;
 		};
 		26A978430AA9373100FF1F22 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2506,55 +2391,13 @@
 			};
 			name = Debug;
 		};
-		26A978440AA9373100FF1F22 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/sbin;
-				OTHER_CFLAGS = (
-					"-iquote",
-					"$(SRCROOT)/zfs_lib/libzfs",
-					"-isystem",
-					"$(SRCROOT)/zfs_lib/",
-					"-isystem",
-					"$(SRCROOT)/zfs_common/",
-					"-isystem",
-					"$(SRCROOT)/zfs_kext/zfs/",
-					"-I",
-					"$(SRCROOT)/zfs_lib/",
-				);
-				OTHER_LDFLAGS = "-lzfs";
-				PREBINDING = NO;
-				PRODUCT_NAME = zpool;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		26C84C260AB75E3E008B950C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = "zfs aggregate";
+				PRODUCT_NAME = ZFS_AGGREGATE;
 			};
 			name = Debug;
-		};
-		26C84C270AB75E3E008B950C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = zfs;
-				SYMROOT = build;
-				ZERO_LINK = NO;
-			};
-			name = Release;
 		};
 		26E59EC20B87AA4600CFC573 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2576,27 +2419,6 @@
 				ZERO_LINK = YES;
 			};
 			name = Debug;
-		};
-		26E59EC30B87AA4600CFC573 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEPLOYMENT_LOCATION = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_GROUP = "$(GROUP)";
-				INSTALL_PATH = /usr/local/bin;
-				OTHER_CFLAGS = (
-					"-isystem",
-					"$(SRCROOT)/zfs_common/",
-				);
-				OTHER_LDFLAGS = "-lcurses";
-				PREBINDING = NO;
-				PRODUCT_NAME = zoink;
-				ZERO_LINK = NO;
-			};
-			name = Release;
 		};
 		26F63DB80AABD48F000C5196 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2622,24 +2444,420 @@
 			};
 			name = Debug;
 		};
-		26F63DB90AABD48F000C5196 /* Release */ = {
+		965D41A210B79A7600697698 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+			};
+			name = Release;
+		};
+		965D41A310B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = s;
+				PRODUCT_NAME = ZFS_AGGREGATE;
+			};
+			name = Release;
+		};
+		965D41A410B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/sbin;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = libmaczfs;
+			};
+			name = Release;
+		};
+		965D41A510B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-I",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = libavl;
+			};
+			name = Release;
+		};
+		965D41A610B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-I",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+					"-I",
+					"\"$(SRCROOT)/upstream/opensolaris/common/sys\"",
+					"-I",
+					"\"$(SRCROOT)/upstream/opensolaris/lib\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = libdevid;
+			};
+			name = Release;
+		};
+		965D41A710B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = libgen;
+			};
+			name = Release;
+		};
+		965D41A810B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/zfs_lib/",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = libnvpair;
+			};
+			name = Release;
+		};
+		965D41A910B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-I",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+					"-I",
+					"\"$(SRCROOT)/upstream/opensolaris/common/sys\"",
+					"-I",
+					"\"$(SRCROOT)/upstream/opensolaris/lib\"",
+					"-I",
+					"\"$(SRCROOT)/upstream/opensolaris/lib/libuutil\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = libuutil;
+			};
+			name = Release;
+		};
+		965D41AA10B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				EXECUTABLE_PREFIX = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "TEXT_DOMAIN=0";
+				INSTALL_PATH = /usr/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/zfs_common/",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common/zfs\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common/fs/zfs\"",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = libzfs;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		965D41AB10B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"NAMEDSTREAMS=1",
+					__APPLE_API_UNSTABLE,
+					__APPLE__,
+					_KERNEL,
+					ZFS_DEBUG,
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "src/zfs-kext/Info.plist";
+				INSTALL_GROUP = wheel;
+				INSTALL_OWNER = root;
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				MODULE_NAME = com.apple.filesystems.zfs;
+				MODULE_START = zfs_module_start;
+				MODULE_STOP = zfs_module_stop;
+				MODULE_VERSION = 8.0;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-I",
+					"\"$(SRCROOT)/src/compat\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common/sys\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common/zfs\"",
+					"-include",
+					"\"$(SRCROOT)/upstream/opensolaris/common/sys/types.h\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common/fs/zfs\"",
+					"-include",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common/fs/zfs/sys/zfs_context.h\"",
+				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = zfs;
+				VERSIONING_SYSTEM = "apple-generic";
+				WARNING_CFLAGS = (
+					"-Wno-unknown-pragmas",
+					"-Wno-missing-braces",
+					"-Wno-sign-compare",
+					"-Wno-parentheses",
+					"-Wno-uninitialized",
+					"-Wno-implicit-function-declaration",
+					"-Wno-unused",
+					"-Wno-trigraphs",
+					"-Wno-char-subscripts",
+					"-Wno-switch",
+				);
+				WRAPPER_EXTENSION = kext;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		965D41AC10B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/sbin;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/lib/libzfs\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/uts/common/fs/zfs\"",
+				);
+				OTHER_LDFLAGS = "-lzfs";
+				PREBINDING = NO;
+				PRODUCT_NAME = zpool;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		965D41AD10B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/sbin;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/lib/libzfs\"",
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 				);
 				OTHER_LDFLAGS = "-lzfs";
 				PREBINDING = NO;
 				PRODUCT_NAME = zfs;
 				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		965D41AE10B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Filesystems/zfs.fs";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+				);
+				OTHER_LDFLAGS = "-lzfs";
+				PREBINDING = NO;
+				PRODUCT_NAME = zfs.util;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		965D41AF10B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				INFOPLIST_FILE = "src/zfs-fs/Info.plist";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Filesystems";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = zfs;
+				WRAPPER_EXTENSION = fs;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		965D41B010B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-isystem",
+					"\"$(SRCROOT)/upstream/opensolaris/common\"",
+				);
+				OTHER_LDFLAGS = "-lcurses";
+				PREBINDING = NO;
+				PRODUCT_NAME = zoink;
+				ZERO_LINK = YES;
+			};
+			name = Release;
+		};
+		965D41B110B79A7600697698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = "fix-nofs";
 			};
 			name = Release;
 		};
@@ -2651,6 +2869,10 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
@@ -2664,22 +2886,6 @@
 			};
 			name = Debug;
 		};
-		967B9D49109CCA420062214D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = libavl;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		967B9D71109CCB0D0062214D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2688,6 +2894,10 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
@@ -2701,22 +2911,6 @@
 			};
 			name = Debug;
 		};
-		967B9D72109CCB0D0062214D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = libavl;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		967B9DF5109CCE140062214D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2725,6 +2919,10 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
@@ -2742,22 +2940,6 @@
 			};
 			name = Debug;
 		};
-		967B9DF6109CCE140062214D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = libavl;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		967B9E8F109CD1B20062214D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2766,6 +2948,10 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
@@ -2775,22 +2961,6 @@
 			};
 			name = Debug;
 		};
-		967B9E90109CD1B20062214D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = libuutil;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		96A9F82D109C20520050AF13 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2799,6 +2969,10 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
@@ -2818,22 +2992,6 @@
 			};
 			name = Debug;
 		};
-		96A9F82E109C20520050AF13 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = libuutil;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		96A9F8BE109C24E40050AF13 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2851,22 +3009,6 @@
 			};
 			name = Debug;
 		};
-		96A9F8BF109C24E40050AF13 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = "libzfs-mac";
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		DAD6B3D1109409E4008A0395 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2883,21 +3025,6 @@
 			};
 			name = Debug;
 		};
-		DAD6B3D2109409E4008A0395 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/bin;
-				PREBINDING = NO;
-				PRODUCT_NAME = "fix-nofs";
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2905,145 +3032,145 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB91C408733DAC0010E9CD /* Debug */,
-				1DEB91C508733DAC0010E9CD /* Release */,
+				965D41AB10B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		1DEB91C708733DAC0010E9CD /* Build configuration list for PBXProject "zfs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB91C808733DAC0010E9CD /* Debug */,
-				1DEB91C908733DAC0010E9CD /* Release */,
+				965D41A210B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		2611F73B0ACDD14700E5D4E2 /* Build configuration list for PBXNativeTarget "zfs.util" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2611F73C0ACDD14700E5D4E2 /* Debug */,
-				2611F73D0ACDD14700E5D4E2 /* Release */,
+				965D41AE10B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		2611F7600ACDD4E200E5D4E2 /* Build configuration list for PBXNativeTarget "zfs.fs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2611F7610ACDD4E200E5D4E2 /* Debug */,
-				2611F7620ACDD4E200E5D4E2 /* Release */,
+				965D41AF10B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		269640720AACEAFA0073456B /* Build configuration list for PBXNativeTarget "libzfs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				269640730AACEAFA0073456B /* Debug */,
-				269640740AACEAFA0073456B /* Release */,
+				965D41AA10B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		26A978420AA9373100FF1F22 /* Build configuration list for PBXNativeTarget "zpool" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26A978430AA9373100FF1F22 /* Debug */,
-				26A978440AA9373100FF1F22 /* Release */,
+				965D41AC10B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		26C84C250AB75E3E008B950C /* Build configuration list for PBXAggregateTarget "zfs aggregate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26C84C260AB75E3E008B950C /* Debug */,
-				26C84C270AB75E3E008B950C /* Release */,
+				965D41A310B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		26E59EC10B87AA4600CFC573 /* Build configuration list for PBXNativeTarget "zoink" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26E59EC20B87AA4600CFC573 /* Debug */,
-				26E59EC30B87AA4600CFC573 /* Release */,
+				965D41B010B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		26F63DB70AABD48F000C5196 /* Build configuration list for PBXNativeTarget "zfs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26F63DB80AABD48F000C5196 /* Debug */,
-				26F63DB90AABD48F000C5196 /* Release */,
+				965D41AD10B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		967B9D4E109CCA540062214D /* Build configuration list for PBXNativeTarget "libavl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				967B9D48109CCA420062214D /* Debug */,
-				967B9D49109CCA420062214D /* Release */,
+				965D41A510B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		967B9D70109CCB0D0062214D /* Build configuration list for PBXNativeTarget "libnvpair" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				967B9D71109CCB0D0062214D /* Debug */,
-				967B9D72109CCB0D0062214D /* Release */,
+				965D41A810B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		967B9DF4109CCE140062214D /* Build configuration list for PBXNativeTarget "libdevid" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				967B9DF5109CCE140062214D /* Debug */,
-				967B9DF6109CCE140062214D /* Release */,
+				965D41A610B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		967B9E8E109CD1B20062214D /* Build configuration list for PBXNativeTarget "libgen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				967B9E8F109CD1B20062214D /* Debug */,
-				967B9E90109CD1B20062214D /* Release */,
+				965D41A710B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		96A9F835109C20560050AF13 /* Build configuration list for PBXNativeTarget "libuutil" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				96A9F82D109C20520050AF13 /* Debug */,
-				96A9F82E109C20520050AF13 /* Release */,
+				965D41A910B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		96A9F8C0109C25020050AF13 /* Build configuration list for PBXNativeTarget "libmaczfs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				96A9F8BE109C24E40050AF13 /* Debug */,
-				96A9F8BF109C24E40050AF13 /* Release */,
+				965D41A410B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		DAD6B3D410940A02008A0395 /* Build configuration list for PBXNativeTarget "fix-nofs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DAD6B3D1109409E4008A0395 /* Debug */,
-				DAD6B3D2109409E4008A0395 /* Release */,
+				965D41B110B79A7600697698 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
