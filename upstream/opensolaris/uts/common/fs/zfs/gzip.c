@@ -38,6 +38,10 @@
 #include <strings.h>
 #endif
 
+#ifdef __APPLE__
+#include "gzip.h"
+#endif
+
 size_t
 gzip_compress(void *s_start, void *d_start, size_t s_len, size_t d_len, int n)
 {

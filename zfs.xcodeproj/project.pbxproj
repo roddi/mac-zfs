@@ -404,6 +404,7 @@
 		26F63DB20AABD480000C5196 /* zfs */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = zfs; sourceTree = BUILT_PRODUCTS_DIR; };
 		32A4FEC40562C75800D090E7 /* zfs.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zfs.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		964B2C98109CE28F00968674 /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
+		965A265A10B78B1900B1784B /* gzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gzip.h; sourceTree = "<group>"; };
 		9661E60A109ACD13006593D6 /* gdbmacros */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gdbmacros; sourceTree = "<group>"; };
 		9661E60C109ACD13006593D6 /* fix-nofs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "fix-nofs.m"; sourceTree = "<group>"; };
 		9661E60E109ACD13006593D6 /* install-debug.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "install-debug.sh"; sourceTree = "<group>"; };
@@ -1445,6 +1446,7 @@
 			children = (
 				96A9F8B7109C24800050AF13 /* dgettext.h */,
 				96A9F8B8109C24800050AF13 /* dgettext.c */,
+				965A265A10B78B1900B1784B /* gzip.h */,
 			);
 			path = compat;
 			sourceTree = "<group>";
@@ -2205,6 +2207,8 @@
 				MODULE_VERSION = 8.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
+					"-I",
+					"\"$(SRCROOT)/src/compat\"",
 					"-isystem",
 					"\"$(SRCROOT)/upstream/opensolaris/common\"",
 					"-isystem",
