@@ -2,9 +2,8 @@
  * CDDL HEADER START
  *
  * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License").  You may not use this file except in compliance
- * with the License.
+ * Common Development and Distribution License (the "License").
+ * You may not use this file except in compliance with the License.
  *
  * You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
  * or http://www.opensolaris.org/os/licensing.
@@ -19,7 +18,7 @@
  *
  * CDDL HEADER END
  *
- * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
+ * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
 /* Copyright (c) 1983, 1984, 1985, 1986, 1987, 1988, 1989 AT&T */
@@ -28,9 +27,6 @@
  * Portions of this source code were derived from Berkeley
  * 4.3 BSD under license from the Regents of the University of
  * California.
- */
-/* Portions Copyright 2007 Apple Inc. All rights reserved.
- * Use is subject to license terms.
  */
  
 /*
@@ -41,14 +37,12 @@
 #ifndef _RPC_XDR_H
 #define	_RPC_XDR_H
 
-#pragma ident	"@(#)xdr.h	1.54	05/06/10 SMI"
-
 #include <sys/byteorder.h>	/* For all ntoh* and hton*() kind of macros */
 #include <rpc/types.h>	/* For all ntoh* and hton*() kind of macros */
 #ifndef _KERNEL
 #include <stdio.h> /* defines FILE *, used in ANSI C function prototypes */
 #endif
-#ifdef _KERNEL && !defined(__APPLE__)
+#ifdef _KERNEL
 //#include <sys/stream.h>
 #endif
 
@@ -154,7 +148,7 @@ struct xdr_ops {
 #if defined(_LP64) || defined(_KERNEL)
 		bool_t	(*x_getint32)(struct XDR *, int32_t *);
 		/* get a int from underlying stream */
-		bool_t (*x_putint32)(struct XDR *, int32_t *);
+		bool_t	(*x_putint32)(struct XDR *, int32_t *);
 		/* put an int to " */
 #endif /* _LP64 || _KERNEL */
 #else
@@ -426,6 +420,8 @@ extern bool_t	xdr_opaque(XDR *, caddr_t, const uint_t);
 extern bool_t	xdr_string(XDR *, char **, const uint_t);
 extern bool_t	xdr_union(XDR *, enum_t *, char *,
 		    const struct xdr_discrim *, const xdrproc_t);
+extern bool_t	xdr_vector(XDR *, char *, const uint_t, const uint_t,
+    const xdrproc_t);
 extern unsigned int  xdr_sizeof(xdrproc_t, void *);
 
 extern bool_t   xdr_hyper(XDR *, longlong_t *);
@@ -434,6 +430,7 @@ extern bool_t   xdr_u_hyper(XDR *, u_longlong_t *);
 extern bool_t   xdr_u_longlong_t(XDR *, u_longlong_t *);
 
 extern bool_t	xdr_char(XDR *, char *);
+extern bool_t	xdr_u_char(XDR *, uchar_t *);
 extern bool_t	xdr_wrapstring(XDR *, char **);
 extern bool_t	xdr_reference(XDR *, caddr_t *, uint_t, const xdrproc_t);
 extern bool_t	xdr_pointer(XDR *, char **, uint_t, const xdrproc_t);
@@ -452,9 +449,6 @@ extern bool_t	xdr_uint64_t(XDR *, uint64_t *);
 #endif
 
 #ifndef _KERNEL
-extern bool_t	xdr_u_char(XDR *, uchar_t *);
-extern bool_t	xdr_vector(XDR *, char *, const uint_t, const uint_t, const
-xdrproc_t);
 extern bool_t	xdr_float(XDR *, float *);
 extern bool_t	xdr_double(XDR *, double *);
 extern bool_t	xdr_quadruple(XDR *, long double *);
@@ -474,12 +468,14 @@ extern bool_t	xdr_bytes();
 extern bool_t	xdr_opaque();
 extern bool_t	xdr_string();
 extern bool_t	xdr_union();
+extern bool_t	xdr_vector();
 
 extern bool_t   xdr_hyper();
 extern bool_t   xdr_longlong_t();
 extern bool_t   xdr_u_hyper();
 extern bool_t   xdr_u_longlong_t();
 extern bool_t	xdr_char();
+extern bool_t	xdr_u_char();
 extern bool_t	xdr_reference();
 extern bool_t	xdr_pointer();
 extern void	xdr_free();
@@ -498,8 +494,6 @@ extern bool_t	xdr_uint64_t();
 #endif
 
 #ifndef _KERNEL
-extern bool_t	xdr_u_char();
-extern bool_t	xdr_vector();
 extern bool_t	xdr_float();
 extern bool_t	xdr_double();
 extern bool_t   xdr_quadruple();
@@ -549,8 +543,14 @@ typedef struct xdr_bytesrec xdr_bytesrec;
 #ifdef _KERNEL
 #define	XDR_PEEK		2
 #define	XDR_SKIPBYTES		3
-#define	XDR_RDMAGET		4
-#define	XDR_RDMASET		5
+#define	XDR_RDMA_GET_FLAGS	4
+#define	XDR_RDMA_SET_FLAGS	5
+#define	XDR_RDMA_ADD_CHUNK	6
+#define	XDR_RDMA_GET_CHUNK_LEN	7
+#define	XDR_RDMA_SET_WLIST	8
+#define	XDR_RDMA_GET_WLIST	9
+#define	XDR_RDMA_GET_WCINFO	10
+#define	XDR_RDMA_GET_RLIST	11
 #endif
 
 /*
@@ -586,13 +586,12 @@ extern uint_t xdrrec_readbytes();
 #else
 
 extern void	xdrmem_create(XDR *, caddr_t, uint_t, enum xdr_op);
-#ifndef __APPLE__
-extern void	xdrmblk_init(XDR *, mblk_t *, enum xdr_op, int);
-extern bool_t	xdrmblk_getmblk(XDR *, mblk_t **, uint_t *);
-extern bool_t	xdrmblk_putmblk(XDR *, mblk_t *, uint_t);
-#endif /*__APPLE__*/
-
+//extern void	xdrmblk_init(XDR *, mblk_t *, enum xdr_op, int);
+//extern bool_t	xdrmblk_getmblk(XDR *, mblk_t **, uint_t *);
+//extern bool_t	xdrmblk_putmblk(XDR *, mblk_t *, uint_t);
 extern struct xdr_ops xdrmblk_ops;
+extern struct xdr_ops xdrrdmablk_ops;
+extern struct xdr_ops xdrrdma_ops;
 
 struct rpc_msg;
 extern bool_t	xdr_callmsg(XDR *, struct rpc_msg *);

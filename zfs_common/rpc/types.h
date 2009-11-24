@@ -31,23 +31,16 @@
  * 4.3 BSD under license from the Regents of the University of
  * California.
  */
-/* Portions Copyright 2007 Apple Inc. All rights reserved.
- * Use is subject to license terms.
-*/
 
 #ifndef _RPC_TYPES_H
 #define	_RPC_TYPES_H
 
-#pragma ident	"@(#)types.h	1.29	05/06/29 SMI"
+#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
  * Rpc additions to <sys/types.h>
  */
 #include <sys/types.h>
-#if defined(__APPLE__) && !defined(_KERNEL)
-#include <libc.h>
-#include <string.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
