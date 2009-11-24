@@ -535,14 +535,7 @@ flags |= B_NOCACHE;
 		panic("vdev_disk_io_start: buf_setcallback failed\n");
 	
 	if (zio->io_type == ZIO_TYPE_WRITE) {
-#ifdef ZFS_READONLY_KEXT
-		buf_seterror(bp, 0);
-		buf_setresid(bp, 0);
-		vdev_disk_io_intr(bp, zio);
-		return;
-#else
 		vnode_startwrite(dvd->vd_devvp);
-#endif /*ZFS_READONLY_KEXT*/
 	}
 	error = VNOP_STRATEGY(bp);
 #else

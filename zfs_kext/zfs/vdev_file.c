@@ -209,13 +209,6 @@ vdev_file_io_start(zio_t *zio)
 		return;
 	}
 
-#ifdef ZFS_READONLY_KEXT
-	if (zio->io_type == ZIO_TYPE_WRITE) {
-		zio->io_error = 0;
-		zio_next_stage_async(zio);
-		return;
-	}
-#endif /* ZFS_READONLY_KEXT */
 
 	zio->io_error = vn_rdwr(zio->io_type == ZIO_TYPE_READ ?
 	    UIO_READ : UIO_WRITE, vf->vf_vnode, zio->io_data,

@@ -329,7 +329,6 @@ out:
 	}
 
 	return (error);
-
 }
 
 static int
@@ -339,9 +338,6 @@ zfs_vfs_mount(struct mount *mp, vnode_t devvp, user_addr_t data, vfs_context_t c
 	size_t  osnamelen = 0;
 	int		error = 0;
 	int		canwrite;
-#ifdef ZFS_READONLY_KEXT
-	struct componentname  cn;
-#endif
 	/*
 	 * Get the objset name (the "special" mount argument).
 	 * The filesystem that we mount as root is defined in the
@@ -463,9 +459,6 @@ zfs_vfs_mount(struct mount *mp, vnode_t devvp, user_addr_t data, vfs_context_t c
 		/* Advisory locking should be handled at the VFS layer */
 		vfs_setlocklocal(mp);
 
-#ifdef ZFS_READONLY_KEXT
-		vfs_setflags(mp, (u_int64_t)((unsigned int)MNT_RDONLY));
-#endif
 		/*
 		 * Mac OS X needs a file system modify time
 		 *
@@ -510,21 +503,6 @@ zfs_vfs_mount(struct mount *mp, vnode_t devvp, user_addr_t data, vfs_context_t c
 			 */
 			zfsvfs->z_last_unmount_time = 0xBADC0DE;
 			zfsvfs->z_last_mtime_synced = VTOZ(xdvp)->z_id;
-#ifdef ZFS_READONLY_KEXT
-			bzero(&cn, sizeof (cn));
-			cn.cn_nameiop = LOOKUP;
-			cn.cn_flags = ISLASTCN;
-			cn.cn_nameptr = ZFS_MTIME_XATTR;
-			cn.cn_namelen = strlen(cn.cn_nameptr);
-
-			/* Lookup the attribute name. */
-			if (zfs_dirlook(VTOZ(xdvp), &cn, &xvp)) {
-					zfsvfs->z_last_unmount_time = 0;
-					zfsvfs->z_last_mtime_synced = 0;
-					vnode_put(xdvp);
-					goto out;
-			}
-#else
 			flag = vfs_isrdonly(mp) ? 0 : ZEXISTS;
 			/* Lookup or create the named attribute. */
 			if ( zfs_obtain_xattr(VTOZ(xdvp), ZFS_MTIME_XATTR,
@@ -537,7 +515,6 @@ zfs_vfs_mount(struct mount *mp, vnode_t devvp, user_addr_t data, vfs_context_t c
 				}
 				gethrestime(&now);
 			ZFS_TIME_ENCODE(&now, VTOZ(xvp)->z_phys->zp_mtime);
-#endif
 			vnode_put(xdvp);
 			vnode_ref(xvp);
 
@@ -803,7 +780,6 @@ zfs_vfs_getattr(struct mount *mp, struct vfs_attr *fsap, __unused vfs_context_t 
 	VFSATTR_RETURN(fsap, f_carbon_fsid, 0);
 
 	ZFS_EXIT(zfsvfs);
-
 	return (0);
 }
 
@@ -1166,11 +1142,7 @@ zfs_fini(void)
 static int
 zfs_vfs_setattr(__unused struct mount *mp, __unused struct vfs_attr *fsap, __unused vfs_context_t context)
 {
-#ifdef ZFS_READONLY_KEXT
-	return (EROFS);
-#else
 	return (ENOTSUP);
-#endif
 }
 
 
@@ -1333,16 +1305,6 @@ zfs_vfs_sysctl(int *name, __unused u_int namelen, user_addr_t oldp, size_t *oldl
 		return (error);
 	    }
 
-#ifdef ZFS_READONLY_KEXT
-	case ZFS_SYSCTL_READONLY: {
-		int rdonly = 1;
-		/*
-		 * Inform user commands that zfs file systems are read-only
-		 */
-		error = copyout(&rdonly, oldp, sizeof (rdonly));
-		return (error);
-	    }
-#endif /* ZFS_READONLY_KEXT */
 
 	case ZFS_SYSCTL_CONFIG_DEBUGMSG:
 		error = sysctl_int(oldp, oldlenp, newp, newlen, &zfs_msg_buf_enabled);
@@ -1377,9 +1339,6 @@ zfs_module_start(__unused kmod_info_t *ki, __unused void *data)
 {
 	struct vfs_fsentry vfe;
 
-#ifdef ZFS_READONLY_KEXT
-	printf("zfs: read-only implementation loaded\n");
-#endif
 
 	zfs_init();
 

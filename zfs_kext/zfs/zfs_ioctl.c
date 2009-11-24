@@ -165,11 +165,13 @@ history_str_get(zfs_cmd_t *zc)
 #ifdef __APPLE__
 	if (xcopyin(zc->zc_history, buf, HIS_MAX_RECORD_LEN) != 0) {
 #else
-	if (copyinstr(zc->zc_history, buf, HIS_MAX_RECORD_LEN, NULL) != 0) {
+	if (copyinstr(zc->zc_history, 
+            buf, HIS_MAX_RECORD_LEN, NULL) != 0) {
 #endif
 		history_str_free(buf);
 		return (NULL);
 	}
+
 	buf[HIS_MAX_RECORD_LEN -1] = '\0';
 	
 	return (buf);
@@ -711,10 +713,6 @@ put_nvlist(zfs_cmd_t *zc, nvlist_t *nvl)
 static int
 zfs_ioc_pool_create(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-
-	return (EPERM);
-#else
 	int error;
 	nvlist_t *config;
 	char *buf;
@@ -734,21 +732,15 @@ zfs_ioc_pool_create(zfs_cmd_t *zc)
 	history_str_free(buf);
 
 	return (error);
-	
-#endif /* ZFS_READONLY_KEXT */
 }
 
 static int
 zfs_ioc_pool_destroy(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-return (EPERM);
-#else
 	int error;
 	zfs_log_history(zc);
 	error = spa_destroy(zc->zc_name);
 	return (error);
-#endif /* ZFS_READONLY_KEXT */
 }
 
 static int
@@ -964,10 +956,6 @@ zfs_ioc_obj_to_path(zfs_cmd_t *zc)
 static int
 zfs_ioc_vdev_add(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-
-	return (EPERM);
-#else
 	spa_t *spa;
 	int error;
 	nvlist_t *config;
@@ -991,17 +979,11 @@ zfs_ioc_vdev_add(zfs_cmd_t *zc)
 	}
 	spa_close(spa, FTAG);
 	return (error);
-
-#endif /* ZFS_READONLY_KEXT */
 }
 
 static int
 zfs_ioc_vdev_remove(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-
-	return (EPERM);
-#else
 	spa_t *spa;
 	int error;
 
@@ -1011,8 +993,6 @@ zfs_ioc_vdev_remove(zfs_cmd_t *zc)
 	error = spa_vdev_remove(spa, zc->zc_guid, B_FALSE);
 	spa_close(spa, FTAG);
 	return (error);
-
-#endif /* ZFS_READONLY_KEXT */
 }
 
 static int
@@ -1437,10 +1417,6 @@ zfs_set_prop_nvlist(const char *name, nvlist_t *nvl)
 static int
 zfs_ioc_set_prop(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-
-	return (EPERM);
-#else
 	nvlist_t *nvl;
 	int error;
 
@@ -1451,7 +1427,6 @@ zfs_ioc_set_prop(zfs_cmd_t *zc)
 
 	nvlist_free(nvl);
 	return (error);
-#endif /* ZFS_READONLY_KEXT */
 }
 
 static int
@@ -1694,11 +1669,7 @@ static int
 zfs_ioc_create_minor(zfs_cmd_t *zc)
 {
 #ifdef __APPLE__
-#ifdef ZFS_READONLY_KEXT
-	return (EPERM);
-#else
 	return (zvol_create_minor(zc->zc_name, zc->zc_dev));
-#endif /*ZFS_READONLY_KEXT*/
 #else
 	return (zvol_create_minor(zc->zc_name, ddi_driver_major(zfs_dip)));
 #endif /* APPLE */
@@ -1707,13 +1678,7 @@ zfs_ioc_create_minor(zfs_cmd_t *zc)
 static int
 zfs_ioc_remove_minor(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-
-	return (EPERM);
-#else
 	return (zvol_remove_minor(zc->zc_name));
-
-#endif /* ZFS_READONLY_KEXT */
 }
 
 /*
@@ -1761,10 +1726,6 @@ zfs_create_cb(objset_t *os, void *arg, cred_t *cr, dmu_tx_t *tx)
 static int
 zfs_ioc_create(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-
-	return (EPERM);
-#else
 	objset_t *clone;
 	int error = 0;
 	nvlist_t *nvprops = NULL;
@@ -1871,8 +1832,6 @@ zfs_ioc_create(zfs_cmd_t *zc)
 
 	nvlist_free(nvprops);
 	return (error);
-
-#endif /* ZFS_READONLY_KEXT */
 }
 
 static int
@@ -1932,10 +1891,6 @@ zfs_unmount_snap(char *name, void *arg)
 static int
 zfs_ioc_destroy_snaps(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-
-	return (EPERM);
-#else
 	int err;
 
 	if (snapshot_namecheck(zc->zc_value, NULL, NULL) != 0)
@@ -1945,17 +1900,11 @@ zfs_ioc_destroy_snaps(zfs_cmd_t *zc)
 	if (err)
 		return (err);
 	return (dmu_snapshots_destroy(zc->zc_name, zc->zc_value));
-
-#endif /* ZFS_READONLY_KEXT */
 }
 
 static int
 zfs_ioc_destroy(zfs_cmd_t *zc)
 {
-#ifdef ZFS_READONLY_KEXT
-
-	return (EPERM);
-#else
 	if (strchr(zc->zc_name, '@') && zc->zc_objset_type == DMU_OST_ZFS) {
 		int err = zfs_unmount_snap(zc->zc_name, NULL);
 		if (err)
@@ -1963,8 +1912,6 @@ zfs_ioc_destroy(zfs_cmd_t *zc)
 	}
 
 	return (dmu_objset_destroy(zc->zc_name));
-
-#endif /* ZFS_READONLY_KEXT */
 }
 
 static int
@@ -1977,10 +1924,7 @@ static int
 zfs_ioc_rename(zfs_cmd_t *zc)
 {
 	boolean_t recursive = zc->zc_cookie & 1;
-#ifdef ZFS_READONLY_KEXT
 
-	return (EPERM);
-#else
 	zc->zc_value[sizeof (zc->zc_value) - 1] = '\0';
 	if (dataset_namecheck(zc->zc_value, NULL, NULL) != 0)
 		return (EINVAL);
@@ -1998,8 +1942,6 @@ zfs_ioc_rename(zfs_cmd_t *zc)
 	}
 
 	return (dmu_objset_rename(zc->zc_name, zc->zc_value, recursive));
-
-#endif /* ZFS_READONLY_KEXT */
 }
 
 #if ZFS_LEOPARD_ONLY
@@ -2028,7 +1970,6 @@ zfs_ioc_recvbackup(zfs_cmd_t *zc)
 	 */
 	if ((error = file_vnode_withvid(fd, &vp, NULL)))
 	       return (EBADF);	
-
 	error = dmu_recvbackup(zc->zc_value, &zc->zc_begin_record,
 	    &zc->zc_cookie, (boolean_t)zc->zc_guid, vp,
 	    zc->zc_history_offset);
@@ -2524,11 +2465,7 @@ zfs_ioctl_init(void)
 	dev = zfs_major << 24;
 	zfs_devnode = devfs_make_node(dev, DEVFS_CHAR, UID_ROOT, GID_WHEEL, 0666, "zfs", 0);
 
-#ifdef ZFS_READONLY_KEXT
-	spa_init(FREAD);
-#else
 	spa_init(FREAD | FWRITE);
-#endif
 	zvol_init();
 }
 
