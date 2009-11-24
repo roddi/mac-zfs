@@ -548,13 +548,12 @@ libzfs_print_on_error(libzfs_handle_t *hdl, boolean_t printerr)
  * Possible zfs kext locations.
  */
 const char *kextpaths[] = {
-	"/System/Library/Extensions/zfs.kext",		/* Preferred (if available) */
-	"/AppleInternal/zfs/zfs.kext",			/* Apple Internal */
-	"/System/Library/Extensions/zfs.readonly.kext"	/* Mac OS X 10.5 Default */
+	/* Moved to where third party extensions belong vs. Apple Official */
+	"/Library/Extensions/zfs.kext",
 };
 
 int kextvers[] = {
-	0, 0, 0
+	0
 };
 
 static void
@@ -667,11 +666,9 @@ libzfs_init(void)
 		
 		/* Find all possible zfs kext versions. */
 		getkextvers(kextpaths[0], &kextvers[0]);
-		getkextvers(kextpaths[1], &kextvers[1]);
-		getkextvers(kextpaths[2], &kextvers[2]);
 
 		/* Pick the newest one. */
-		for (i = 0; i < 3; ++i) {
+		for (i = 0; i < 1; ++i) {
 			if (kextvers[i] > kextvers[pick])
 				pick = i;
 		}
